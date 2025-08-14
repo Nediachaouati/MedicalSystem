@@ -89,7 +89,7 @@ export class UsersController {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Détails de votre compte Médecin',
-      template: 'welcome-doctor',
+      template: 'welcome-medecin',
       context: {
         name: user.name || 'MEDECIN',
         email: user.email,

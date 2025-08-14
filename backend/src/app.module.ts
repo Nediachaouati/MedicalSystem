@@ -10,6 +10,8 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AppointmentModule } from './appointment/appointment.module';
+import { SymptomModule } from './symptom/symptom.module';
 
 @Module({
   imports: [
@@ -50,7 +52,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-     AuthModule, UsersModule, ],
+     AuthModule, UsersModule, AppointmentModule, SymptomModule, ],
   controllers: [AppController],
   providers: [
     AppService,{

@@ -78,7 +78,7 @@ export class UsersService {
 
   //register patient
   async create(dto: CreateUserDto): Promise<User> {
-    const { email, password, name } = dto;
+    const { email, password, name ,phoneNumber ,address, birthDate } = dto;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -86,6 +86,9 @@ export class UsersService {
       email,
       password: hashedPassword,
       name,
+      phoneNumber,
+      address,
+      birthDate,
       role: Role.PATIENT, 
     });
 
