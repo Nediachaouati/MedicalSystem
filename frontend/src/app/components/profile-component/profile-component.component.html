@@ -1,0 +1,116 @@
+<app-navbar></app-navbar>
+<div class="profile-container">
+    <app-sidebar></app-sidebar>
+  <h1>Mon Profil</h1>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="user; else loading">
+    <form (ngSubmit)="updateProfile()" class="profile-form">
+      <!-- Photo de profil -->
+      <div class="form-group">
+        <label for="photo">Photo de profil</label>
+        <div class="profile-photo">
+          <img
+            [src]="getPhotoUrl(profileForm.photo)"
+            alt="Photo de profil"
+            class="profile-img"
+          />
+          <input
+            type="file"
+            id="photo"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="profileForm.email"
+          name="email"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <!-- Nom -->
+      <div class="form-group">
+        <label for="name">Nom</label>
+        <input
+          type="text"
+          id="name"
+          [(ngModel)]="profileForm.name"
+          name="name"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <!-- Numéro de téléphone -->
+      <div class="form-group">
+        <label for="phoneNumber">Numéro de téléphone</label>
+        <input
+          type="tel"
+          id="phoneNumber"
+          [(ngModel)]="profileForm.phoneNumber"
+          name="phoneNumber"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Adresse -->
+      <div class="form-group">
+        <label for="address">Adresse</label>
+        <input
+          type="text"
+          id="address"
+          [(ngModel)]="profileForm.address"
+          name="address"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Date de naissance -->
+      <div class="form-group">
+        <label for="birthDate">Date de naissance</label>
+        <input
+          type="date"
+          id="birthDate"
+          [(ngModel)]="profileForm.birthDate"
+          name="birthDate"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Spécialité (pour médecins uniquement) -->
+      <div class="form-group" *ngIf="user.role === role.MEDECIN">
+        <label for="speciality">Spécialité</label>
+        <input
+          type="text"
+          id="speciality"
+          [(ngModel)]="profileForm.speciality"
+          name="speciality"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Bouton de soumission -->
+      <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    </form>
+  </div>
+
+  <ng-template #loading>
+    <p>Chargement des informations du profil...</p>
+  </ng-template>
+</div>

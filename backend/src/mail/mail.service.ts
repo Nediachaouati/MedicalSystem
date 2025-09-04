@@ -1,29 +1,27 @@
-/*import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendCandidatureStatusEmail(
+  async sendAppointmentConfirmation(
     to: string,
-    candidateName: string,
-    jobTitle: string,
-    status: 'accepted' | 'rejected',
+    patientName: string,
+    doctorName: string,
+    date: string,
+    time: string,
   ) {
-    const subject =
-      status === 'accepted'
-        ? 'Convocation à un entretien'
-        : 'Mise à jour de votre candidature';
-    
     await this.mailerService.sendMail({
       to,
-      subject,
-      template: status === 'accepted' ? 'interview' : 'rejection',
+      subject: 'Confirmation de votre rendez-vous',
+      template: 'appointment-confirmation', // Nom du fichier .hbs sans l'extension
       context: {
-        candidateName: candidateName || 'Candidat',
-        jobTitle,
+        patientName: patientName || 'Patient',
+        doctorName: doctorName || 'Médecin',
+        date,
+        time,
       },
     });
   }
-}*/
+}

@@ -5,6 +5,9 @@ export class CreateUserDto {
     role?: string; 
     phoneNumber?: string;
     address?: string;
+    speciality?: string;
     birthDate?: string;
     secretKey?: string; 
+    medecinId?: number; 
+    
   }

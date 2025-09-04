@@ -1,49 +1,64 @@
+import { Appointment } from "src/appointment/entities/appointment.entity";
 import { Role } from "src/role.enum";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('users')
 export class User {
-@PrimaryGeneratedColumn()
-    id:number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({unique:true})
-    email:string;
+  @Column({ unique: true })
+  email: string;
 
-    @Column({ nullable: true })
-    password?: string;
+  @Column({ nullable: true })
+  password?: string;
 
-    @Column({nullable:true})
-    name:string;
+  @Column({ nullable: true })
+  name: string;
 
-    @Column({
-        type: 'enum',
-        enum: Role,
-        default: Role.PATIENT, 
-    })
-    role: Role; 
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.PATIENT,
+  })
+  role: Role;
 
-   /* @Column({ default: false }) // pour soft delete
-    isDeleted: boolean;*/
-    @Column({nullable:true})
-    phoneNumber?: string;
+  @Column({ nullable: true })
+  phoneNumber?: string;
 
-    @Column({nullable:true})
-    address?: string;
+  @Column({ nullable: true })
+  address?: string;
 
-    @Column({ type: 'date', nullable: true })
-    birthDate?: string;
+  @Column({ nullable: true })
+  speciality?: string;
 
+  @Column({ type: 'date', nullable: true })
+  birthDate?: string;
 
-    @Column({ nullable: true }) 
-    photo?: string;
+  @Column({ nullable: true })
+  photo?: string;
 
-    @CreateDateColumn()
-    created_at:Date;
+  @OneToMany(() => Appointment, (appointment) => appointment.patient)
+  appointmentsAsPatient: Appointment[];
 
-    @UpdateDateColumn()
-    updated_at: Date;
+  @OneToMany(() => Appointment, (appointment) => appointment.medecin)
+  appointmentsAsDoctor: Appointment[];
 
-    @DeleteDateColumn({ nullable: true })  // Soft delete column
-    deleted_at: Date;
+  @OneToMany(() => User, (user) => user.medecin)
+  secretaries?: User[];
 
+  @ManyToOne(() => User, (user) => user.secretaries)
+  medecin?: User;
+
+  @Column({ nullable: true })
+  medecinId?: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn({ nullable: true })
+  deleted_at: Date;
 }

@@ -1,0 +1,46 @@
+<div class="sidebar">
+  <h2>Menu</h2>
+  <div class="sidebar-content">
+    <ul class="nav-links">
+      <!-- Options communes à tous les rôles -->
+      <li><a routerLink="/home">Home</a></li>
+
+      <!-- Options pour ADMIN -->
+      <ng-container *ngIf="userRole === 'ADMIN'">
+        <li><a routerLink="/admin/dashboard">Admin Dashboard</a></li>
+        <li><a routerLink="/admin/users">Manage doctors</a></li>
+        <li><a routerLink="/admin/secretaries">Manage Secretaires</a></li>
+      </ng-container>
+
+      <!-- Options pour MEDECIN -->
+      <ng-container *ngIf="userRole === 'MEDECIN'">
+        <li><a routerLink="/medecin/dashboard">Medecin Dashboard</a></li>
+        <li><a routerLink="/medecin/appointments">Appointments</a></li>
+        <li><a routerLink="/medecin/patients">Patients</a></li>
+      </ng-container>
+
+      <!-- Options pour PATIENT -->
+      <ng-container *ngIf="userRole === 'PATIENT'">
+        <li><a routerLink="/patient/dashboard">Patient Dashboard</a></li>
+        <li><a routerLink="/patient/appointments">My Appointments</a></li>
+        <li><a routerLink="/patient/symptoms/new">Enregistrer un symptôme</a></li>
+        <li><a routerLink="/patient/records">Medical Records</a></li>
+      </ng-container>
+
+      <!-- Options pour SECRETAIRE -->
+      <ng-container *ngIf="userRole === 'SECRETAIRE'">
+        <li><a routerLink="/secretaire/dashboard">Liste des medecins</a></li>
+        <li><a routerLink="/list-patients">liste des patients</a></li>
+       
+      </ng-container>
+    </ul>
+
+    <!-- Settings link for ADMIN at the bottom -->
+    <ul class="bottom-links" *ngIf="userRole === 'ADMIN'">
+      <li><a routerLink="/admin/settings">Settings</a></li>
+    </ul>
+
+   
+    
+  </div>
+</div>

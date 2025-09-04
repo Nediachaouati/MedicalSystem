@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+<div class="main-container">
+  <app-sidebar></app-sidebar>
+  <div class="content">
+    <h1>Gérer les Médecins</h1>
+    <div class="table-header">
+      <button class="add-button" (click)="navigateToAddMedecin()">Ajouter Médecin</button>
+    </div>
+    <table *ngIf="doctors.length; else noDoctors">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+         <th>speciality</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doctor of doctors">
+          <td>{{ doctor.name }}</td>
+          <td>{{ doctor.email }}</td>
+         <td>{{ doctor.speciality}}</td>
+          <td>
+            <button class="delete-button" (click)="deleteDoctor(doctor.id)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noDoctors>
+      <p>Aucun médecin trouvé.</p>
+    </ng-template>
+  </div>
+</div>

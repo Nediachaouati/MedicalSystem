@@ -1,34 +1,31 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Role } from 'src/role.enum';
+import { Role } from '../role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { NotificationsService } from '../Notification/notifications.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private notificationsService: NotificationsService,
   ) {}
 
- /*
-  // Filtrer les utilisateurs par rôles (RH ou CANDIDAT)
-  async findUsersByRoles(roles: Role[], query: any): Promise<User[]> {
+  async findUsersByRoles(role: Role): Promise<User[]> {
     return this.usersRepository.find({
-      where: { role: In(roles) },
-      ...query,  
+      where: { role },
     });
   }
-*/
-
 
   async softDeleteUser(id: number): Promise<void> {
-    await this.usersRepository.softDelete(id); // Marks the user as deleted
+    await this.usersRepository.softDelete(id);
   }
-  // Récupérer un utilisateur par ID
+
   async findOneById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
@@ -37,22 +34,19 @@ export class UsersService {
     return user;
   }
 
+  async findByIds(ids: number[]): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { id: In(ids) },
+    });
+  }
 
-  //update user
   async update(id: number, updateUserDto: UpdateUserDto, photo?: Express.Multer.File): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé`);
     }
 
-    if (user.role === Role.PATIENT) {
-      if (updateUserDto.email !== undefined) user.email = updateUserDto.email;
-      if (updateUserDto.name !== undefined) user.name = updateUserDto.name;
-      if (updateUserDto.phoneNumber !== undefined) user.phoneNumber = updateUserDto.phoneNumber;
-      if (updateUserDto.address !== undefined) user.address = updateUserDto.address;
-      if (updateUserDto.birthDate !== undefined) user.birthDate = updateUserDto.birthDate;
-      
-    } else if (user.role === Role.MEDECIN) {
+    if (user.role === Role.PATIENT || user.role === Role.MEDECIN) {
       if (updateUserDto.email !== undefined) user.email = updateUserDto.email;
       if (updateUserDto.name !== undefined) user.name = updateUserDto.name;
       if (updateUserDto.phoneNumber !== undefined) user.phoneNumber = updateUserDto.phoneNumber;
@@ -64,9 +58,9 @@ export class UsersService {
       const salt = await bcrypt.genSalt();
       user.password = await bcrypt.hash(updateUserDto.password, salt);
     }
-    //photo
+
     if (photo) {
-    user.photo = `uploads/photos/${photo.filename}`;
+      user.photo = `Uploads/photos/${photo.filename}`;
     }
 
     await this.usersRepository.save(user);
@@ -74,11 +68,8 @@ export class UsersService {
     return user;
   }
 
-  
-
-  //register patient
   async create(dto: CreateUserDto): Promise<User> {
-    const { email, password, name ,phoneNumber ,address, birthDate } = dto;
+    const { email, password, name, phoneNumber, address, birthDate } = dto;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -89,11 +80,11 @@ export class UsersService {
       phoneNumber,
       address,
       birthDate,
-      role: Role.PATIENT, 
+      role: Role.PATIENT,
     });
 
     const newUser = await this.usersRepository.save(user);
-    delete newUser.password; 
+    delete newUser.password;
     return newUser;
   }
 
@@ -104,40 +95,61 @@ export class UsersService {
         id: true,
         email: true,
         name: true,
-        role: true, 
+        role: true,
         password: selectSecrets,
       },
     });
   }
 
-async createWithRole(dto: CreateUserDto, role: Role): Promise<{ user: User; plainPassword: string }> {
-  const { email, password, name } = dto;
+   async createWithRole(dto: CreateUserDto, role: Role): Promise<{ user: User; plainPassword: string }> {
+    const { email, password, name, medecinId } = dto;
 
-  const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(password, salt);
+    let medecin: User | undefined;
+    if (role === Role.SECRETAIRE && medecinId) {
+      medecin = await this.findOneById(medecinId);
+      if (medecin.role !== Role.MEDECIN) {
+        throw new BadRequestException('L’utilisateur assigné doit être un médecin.');
+      }
+    }
 
-  const user = this.usersRepository.create({
-    email,
-    password: hashedPassword,
-    name,
-    role: role,
-  });
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = await this.usersRepository.save(user);
-  delete newUser.password; 
-  return { user: newUser, plainPassword: password }; 
+    const user = this.usersRepository.create({
+      email,
+      password: hashedPassword,
+      name,
+      role,
+      medecinId: role === Role.SECRETAIRE ? medecinId : undefined,
+      medecin: role === Role.SECRETAIRE ? medecin : undefined,
+    });
+
+    const newUser = await this.usersRepository.save(user);
+
+    if (role === Role.SECRETAIRE && medecin) {
+  await this.notificationsService.createNotification(
+    medecin.id,
+    `Le secrétaire ${name} vous a été assigné.`
+  );
+  await this.notificationsService.createNotification(
+    newUser.id,
+    `Vous avez été assigné au médecin ${medecin.name}.`
+  );
 }
 
-//recuperer tous le champs de userprofile
-async findById(id: number): Promise<User> {
-  const user = await this.usersRepository.findOne({ where: { id } });
-  if (!user) {
-    throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé`);
+    delete (newUser as any).password;
+    return { user: newUser, plainPassword: password };
   }
-  return user;
-}
 
-//delete user
+
+  async findById(id: number): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé`);
+    }
+    return user;
+  }
+
   async delete(id: number): Promise<void> {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
@@ -146,5 +158,16 @@ async findById(id: number): Promise<User> {
     await this.usersRepository.delete(id);
   }
 
-  
+  async findSecretariesByMedecin(medecinId: number): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { role: Role.SECRETAIRE, medecinId, deleted_at: IsNull() },
+    });
+  }
+
+  async findAllSecretaries(): Promise<User[]> {
+    return this.usersRepository.find({ where: { role: Role.SECRETAIRE } });
+  }
 }
+
+
+

@@ -1,0 +1,19 @@
+.main-container {
+  display: flex;
+}
+
+.content {
+  margin-left: 250px; /* Largeur du sidebar */
+  padding: 2rem;
+  width: 100%;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #555;
+}

@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+<div class="dashboard-wrapper">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <div class="container">
+      <h2>Liste des Patients</h2>
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      <table class="table table-striped" *ngIf="patients.length > 0; else noPatients">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patients">
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.email }}</td>
+            <td>{{ patient.phoneNumber || '-' }}</td>
+            <td>{{ patient.address || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noPatients>
+        <p>Aucun patient n'a pris de rendez-vous avec votre médecin.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<nav class="navbar">
+  <div class="navbar-logo">
+    <img
+      src="https://cdn.vectorstock.com/i/1000v/15/16/document-page-logo-concept-vector-14051516.jpg"
+      alt="Logo"
+      class="logo"
+      routerLink="/home"
+    />
+    <span class="logo-text">DIGI-RH</span>
+  </div>
+
+  <div class="navbar-buttons">
+    <ng-container *ngIf="!isLoggedIn(); else loggedIn">
+      <a routerLink="/login" class="btn btn-primary">Login</a>
+      <a routerLink="/register" class="btn btn-secondary">Register</a>
+    </ng-container>
+
+    <ng-template #loggedIn>
+      <a *ngIf="isPatient()" routerLink="/our-services" class="btn btn-info">Our Services</a>
+
+      <div *ngIf="isDoctorOrSecretary()" class="notification-container">
+        <a class="notification-link" (click)="toggleNotifications()" title="Notifications">
+          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828736.png"
+               alt="Notifications"
+               class="notification-icon"/>
+          <span *ngIf="unreadCount > 0" class="notification-count">{{ unreadCount }}</span>
+        </a>
+
+        <div *ngIf="showNotifications" class="notification-dropdown">
+          <ul>
+            <li *ngFor="let notification of notifications"
+                [class.unread-notification]="!notification.isRead"
+                [class.read-notification]="notification.isRead">
+
+              <div class="notification-content">
+                <div class="notification-message">{{ notification.message }}</div>
+                <span class="notification-date">{{ notification.createdAt | date:'short' }}</span>
+              </div>
+
+              <div class="notification-actions">
+                <button *ngIf="!notification.isRead" class="btn-action mark"
+                        (click)="markAsRead(notification.id, $event)">✔ Marquer comme lu</button>
+                <button class="btn-action delete"
+        (click)="deleteNotification(notification.id, $event)">✖ Supprimer</button>
+              </div>
+            </li>
+
+            <li *ngIf="notifications.length === 0">Aucune notification</li>
+          </ul>
+        </div>
+      </div>
+
+      <a routerLink="/profile" class="profile-link" title="Profil">
+        <img [src]="getPhotoUrl(currentUser?.photo)" alt="Photo de profil" class="profile-icon"/>
+      </a>
+
+      <button class="btn btn-danger" (click)="logout()">Logout</button>
+    </ng-template>
+  </div>
+</nav>

@@ -1,0 +1,60 @@
+.main-container {
+  display: flex;
+  min-height: calc(100vh - 60px); /* Ajuster selon la hauteur de la navbar */
+}
+
+app-sidebar {
+  width: 250px; /* Largeur de la sidebar */
+  background-color: #f8f9fa; /* Couleur de fond */
+  border-right: 1px solid #dee2e6; /* Bordure séparatrice */
+}
+
+.content {
+  flex: 1; /* Prend le reste de l'espace */
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.form-group textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.alert-danger {
+  color: red;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}

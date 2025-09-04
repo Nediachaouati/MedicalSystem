@@ -11,6 +11,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AppointmentModule } from './appointment/appointment.module';
+/*import { SymptomModule } from './symptom/symptom.module';*/
+import { ChatModule } from './chat/chat.module';
+import { NotificationsModule } from './Notification/notifications.module';
 import { SymptomModule } from './symptom/symptom.module';
 
 @Module({
@@ -52,7 +55,8 @@ import { SymptomModule } from './symptom/symptom.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-     AuthModule, UsersModule, AppointmentModule, SymptomModule, ],
+    
+     AuthModule, UsersModule, AppointmentModule, ChatModule ,NotificationsModule,SymptomModule,],
   controllers: [AppController],
   providers: [
     AppService,{
@@ -62,3 +66,6 @@ import { SymptomModule } from './symptom/symptom.module';
   ],
 })
 export class AppModule {}
+
+
+

@@ -24,8 +24,14 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   address?: string;
 
   @IsOptional()
+  @IsString()
+  speciality?: string;
+
+  @IsOptional()
   @IsDate()
   birthDate?: string; 
 
+  @IsOptional()
+  medecinId?: number;
 
 }

@@ -1,0 +1,23 @@
+<app-navbar></app-navbar>
+<div class="main-container">
+  <app-sidebar></app-sidebar>
+  <div class="content">
+    <h1>Bienvenue dans votre espace patient</h1>
+    <p>Découvrez les médecins disponibles pour vos consultations.</p>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="doctors-grid" *ngIf="doctors.length; else noDoctors">
+      <div class="doctor-card" *ngFor="let doctor of doctors">
+        <div class="doctor-header">
+          <h3>{{ doctor.name }}</h3>
+          <span class="specialty">{{ doctor.speciality || 'Non spécifié' }}</span>
+        </div>
+        <p class="email">{{ doctor.email }}</p>
+        <p class="speciality">{{ doctor.speciality || 'Non spécifié' }}</p>
+        <button class="book-button" (click)="bookAppointment(doctor.id)">Prendre un rendez-vous</button>
+      </div>
+    </div>
+    <ng-template #noDoctors>
+      <p class="no-doctors">Aucun médecin disponible pour le moment.</p>
+    </ng-template>
+  </div>
+</div>

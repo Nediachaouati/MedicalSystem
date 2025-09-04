@@ -1,0 +1,17 @@
+.form-signin {
+  max-width: 400px;
+  padding: 1rem;
+}
+
+.form-floating {
+  position: relative;
+}
+
+.form-control {
+  height: 50px;
+}
+
+.text-danger {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

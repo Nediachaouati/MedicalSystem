@@ -1,0 +1,50 @@
+<app-navbar></app-navbar>
+<div class="dashboard-wrapper">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <div class="container">
+      <h1>Mes Rendez-vous</h1>
+      <p>Consultez l'état de vos rendez-vous.</p>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Liste des Rendez-vous -->
+      <h2>Vos Rendez-vous</h2>
+      <table class="table table-striped" *ngIf="appointments.length > 0; else noAppointments">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Médecin</th>
+            <th>Date</th>
+            <th>Heure</th>
+            
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let appointment of appointments; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ appointment.doctorName || 'Médecin inconnu' }}</td>
+            <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ appointment.time }}</td>
+            
+            <td>
+              <span [ngClass]="{
+                'status-pending': appointment.status === 'en_attente',
+                'status-confirmed': appointment.status === 'confirmé',
+                'status-rejected': appointment.status === 'refusé'
+              }">
+                {{ appointment.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noAppointments>
+        <p>Aucun rendez-vous trouvé.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
