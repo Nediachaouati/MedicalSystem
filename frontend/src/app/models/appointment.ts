@@ -1,5 +1,7 @@
+import { Prescription } from './Prescription';
 import { Symptom } from './symptom';
 import { User } from './user';
+
 
 export interface Appointment {
   id?: number;
@@ -7,10 +9,11 @@ export interface Appointment {
   medecinId: number;
   date: string;
   time: string;
-  status?: 'en_attente' | 'confirmé' | 'refusé';
+  appointmentStatus: 'en_attente' | 'approuvé' | 'annulé';
+  consultationStatus: 'en_cours' | 'terminée' | null;
   patientName?: string;
   doctorName?: string;
-  patient?: User;
-  medecin?: User;
+  secretaryId?: number;
   symptoms?: Symptom[];
+  prescriptions?: Prescription[];
 }

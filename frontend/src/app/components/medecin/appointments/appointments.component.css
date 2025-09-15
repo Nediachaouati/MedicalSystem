@@ -1,79 +1,308 @@
-/* Wrapper pour la barre latérale et le contenu principal */
 .dashboard-wrapper {
   display: flex;
-  min-height: calc(100vh - 60px); /* Ajuster en fonction de la hauteur de la navbar */
+  min-height: calc(100vh - 60px);
 }
 
-/* Barre latérale */
 app-sidebar {
   width: 250px;
   background-color: #f8f9fa;
-  position: fixed;
-  top: 60px; /* Ajuster en fonction de la hauteur de la navbar */
-  left: 0;
-  height: calc(100vh - 60px);
-  overflow-y: auto;
   border-right: 1px solid #dee2e6;
 }
 
-/* Contenu principal */
 .main-content {
-  margin-left: 250px; /* Égal à la largeur de la barre latérale */
   flex: 1;
   padding: 20px;
 }
 
-/* Conteneur du contenu */
 .container {
   max-width: 1200px;
   margin: 0 auto;
 }
+/* Styles pour les statuts des rendez-vous et consultations */
+.status-en-attente {
+  color: #ffc107; /* Jaune pour "en attente" */
+  font-weight: 600;
+  text-transform: capitalize;
+}
 
-/* Styles pour les tableaux */
+.status-approuve {
+  color: #28a745; /* Vert pour "approuvé" */
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-annule {
+  color: #dc3545; /* Rouge pour "annulé" */
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-en-cours {
+  color: #007bff; /* Bleu pour "en cours" */
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-terminee {
+  color: #17a2b8; /* Cyan pour "terminée" */
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Style du tableau des rendez-vous */
 .table {
   width: 100%;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.table th, .table td {
-  padding: 12px;
+.table thead th {
+  background-color: #f1f3f5;
+  color: #333;
+  font-weight: 600;
+  padding: 15px;
   text-align: left;
+  border-bottom: 2px solid #dee2e6;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
+.table tbody tr {
+  transition: background-color 0.2s ease;
 }
 
-/* Message d'erreur */
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.table tbody td {
+  padding: 12px 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Style du formulaire d'ordonnance */
+.prescription-form {
+  background-color: #f8f9fa;
+  padding: 25px;
+  border-radius: 8px;
+  margin-top: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prescription-form h2 {
+  font-size: 1.5rem;
   margin-bottom: 20px;
-  border-radius: 4px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Styles des boutons */
+.btn {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-right: 10px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  transform: translateY(-1px);
+}
+
+/* Style pour le message d'absence de rendez-vous */
+ng-template p {
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 20px;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  app-sidebar {
-    width: 200px;
+  .table {
+    font-size: 0.9rem;
   }
-  .main-content {
-    margin-left: 200px;
+
+  .table thead th,
+  .table tbody td {
+    padding: 10px;
+  }
+
+  .prescription-form {
+    padding: 15px;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    margin-right: 5px;
+  }
+
+  .prescription-form h2 {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 576px) {
-  app-sidebar {
-    width: 100%;
-    position: relative;
-    top: 0;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid #dee2e6;
+  .table {
+    display: block;
+    overflow-x: auto;
   }
-  .main-content {
-    margin-left: 0;
-    padding: 10px;
+
+  .prescription-form {
+    margin-top: 20px;
   }
+
+  .alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 0.875rem;
+}
+
+.mr-2 {
+  margin-right: 10px;
+}
+
+.status-en-attente {
+  color: #ffc107;
+}
+
+.status-approuve {
+  color: #28a745;
+}
+
+.status-annule {
+  color: #dc3545;
+}
+
+.status-en-cours {
+  color: #007bff;
+}
+
+.status-terminee {
+  color: #28a745;
+}
+
+.prescription-form {
+  max-width: 600px;
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+}
 }

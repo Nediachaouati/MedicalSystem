@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, ForbiddenException, ParseIntPipe } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
@@ -40,9 +40,20 @@ export class AppointmentController {
   }
 
   @Roles(Role.SECRETAIRE)
-  @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body('status') status: 'confirmé' | 'refusé'): Promise<Appointment> {
-    console.log('Updating appointment status:', { id: +id, status });
-    return this.appointmentService.updateStatus(+id, status);
+  @Patch(':id/appointment-status')
+  updateAppointmentStatus(@Param('id') id: string, @Body('appointmentStatus') appointmentStatus: 'en_attente' | 'approuvé' | 'annulé', @CurrentUser() user: User): Promise<Appointment> {
+    if (user.role !== 'SECRETAIRE') {
+      throw new ForbiddenException('Seuls les secrétaires peuvent mettre à jour le statut du rendez-vous');
+    }
+    return this.appointmentService.updateAppointmentStatus(+id, appointmentStatus);
+  }
+
+  @Roles(Role.MEDECIN)
+  @Patch(':id/consultation-status')
+  updateConsultationStatus(@Param('id') id: string, @Body('consultationStatus') consultationStatus: 'en_cours' | 'terminée', @CurrentUser() user: User): Promise<Appointment> {
+    if (user.role !== 'MEDECIN') {
+      throw new ForbiddenException('Seuls les médecins peuvent mettre à jour le statut de consultation');
+    }
+    return this.appointmentService.updateConsultationStatus(+id, consultationStatus);
   }
 }

@@ -48,6 +48,7 @@ export class DashboardSecretariesComponent implements OnInit {
     if (!this.doctorId) return;
     this.appointmentService.getAppointmentsByDoctor(this.doctorId).subscribe({
       next: (appointments) => {
+        console.log('Appointments received:', appointments); // Log pour débogage
         this.appointments = appointments;
       },
       error: (error) => {
@@ -58,10 +59,10 @@ export class DashboardSecretariesComponent implements OnInit {
   }
 
   confirmAppointment(appointmentId: number) {
-    this.appointmentService.updateAppointmentStatus(appointmentId, 'confirmé').subscribe({
+    this.appointmentService.updateAppointmentStatus(appointmentId, 'approuvé').subscribe({
       next: () => {
         this.appointments = this.appointments.map((app) =>
-          app.id === appointmentId ? { ...app, status: 'confirmé' } : app
+          app.id === appointmentId ? { ...app, appointmentStatus: 'approuvé' } : app
         );
         this.errorMessage = null;
         Swal.fire({
@@ -84,26 +85,26 @@ export class DashboardSecretariesComponent implements OnInit {
     });
   }
 
-  refuseAppointment(appointmentId: number) {
-    this.appointmentService.updateAppointmentStatus(appointmentId, 'refusé').subscribe({
+  cancelAppointment(appointmentId: number) {
+    this.appointmentService.updateAppointmentStatus(appointmentId, 'annulé').subscribe({
       next: () => {
         this.appointments = this.appointments.map((app) =>
-          app.id === appointmentId ? { ...app, status: 'refusé' } : app
+          app.id === appointmentId ? { ...app, appointmentStatus: 'annulé' } : app
         );
         this.errorMessage = null;
         Swal.fire({
           title: 'Succès !',
-          text: 'Le rendez-vous a été refusé.',
+          text: 'Le rendez-vous a été annulé.',
           icon: 'success',
           confirmButtonText: 'OK',
         });
       },
       error: (error) => {
-        console.error('Erreur lors du refus du rendez-vous:', error);
-        this.errorMessage = 'Erreur lors du refus du rendez-vous.';
+        console.error('Erreur lors de l\'annulation du rendez-vous:', error);
+        this.errorMessage = 'Erreur lors de l\'annulation du rendez-vous.';
         Swal.fire({
           title: 'Erreur',
-          text: 'Une erreur s\'est produite lors du refus du rendez-vous.',
+          text: 'Une erreur s\'est produite lors de l\'annulation du rendez-vous.',
           icon: 'error',
           confirmButtonText: 'OK',
         });

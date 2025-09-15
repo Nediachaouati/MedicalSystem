@@ -21,6 +21,7 @@
     "@angular/router": "^19.2.0",
     "@angular/ssr": "^19.2.0",
     "express": "^4.18.2",
+    "file-saver": "^2.0.5",
     "rxjs": "^7.8.2",
     "sweetalert2": "^11.22.5",
     "tslib": "^2.3.0",

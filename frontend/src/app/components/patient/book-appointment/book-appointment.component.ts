@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AppointmentService } from '../../../services/appointment.service';
-import { Appointment } from '../../../models/appointment';
-import { User } from '../../../models/user';
-import { UserService } from '../../../services/user-service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import { SidebarComponent } from '../../../sidebar/sidebar.component';
+import { AppointmentService } from '../../../services/appointment.service';
+import { UserService } from '../../../services/user-service';
+import { Appointment } from '../../../models/appointment';
+import { User } from '../../../models/user';
+import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-book-appointment',
@@ -17,17 +18,15 @@ import { SidebarComponent } from '../../../sidebar/sidebar.component';
   styleUrls: ['./book-appointment.component.css'],
 })
 export class BookAppointmentComponent implements OnInit {
-  patientId: number | undefined;
-  medecinId: number | undefined;
-  appointmentData: Appointment = {
+  currentPatient: User | null = null;
+  appointment: Appointment = {
+    id: 0,
     patientId: 0,
     medecinId: 0,
     date: '',
     time: '',
-    status: 'en_attente',
-    patientName: '',
-    doctorName: '',
-    symptoms: [],
+    appointmentStatus: 'en_attente',
+    consultationStatus: null,
   };
   errorMessage: string | null = null;
 
@@ -39,67 +38,67 @@ export class BookAppointmentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      const doctorId = params.get('doctorId');
-      console.log('Doctor ID from URL:', doctorId);
-      if (doctorId) {
-        this.medecinId = +doctorId;
-        this.appointmentData.medecinId = +doctorId;
-      } else {
-        this.errorMessage = 'Aucun médecin sélectionné.';
-      }
-    });
-
     this.userService.getProfile().subscribe({
       next: (user) => {
-        this.patientId = user.id;
-        this.appointmentData.patientId = user.id;
-        this.appointmentData.patientName = user.name;
+        this.currentPatient = user;
+        this.appointment.patientId = user.id;
+        const medecinId = this.route.snapshot.paramMap.get('medecinId');
+        if (medecinId) {
+          this.appointment.medecinId = +medecinId;
+        } else {
+          this.errorMessage = 'Aucun médecin sélectionné.';
+        }
       },
       error: (error) => {
-        this.errorMessage = 'Erreur lors de la récupération du profil.';
-        console.error('Erreur récupération profil:', error);
+        console.error('Erreur lors de la récupération du profil:', error);
+        this.errorMessage = 'Erreur lors de la récupération des informations du patient.';
       },
     });
   }
 
-  submitAppointment() {
-    if (!this.patientId || !this.medecinId) {
-      this.errorMessage = 'Veuillez sélectionner un médecin.';
+  bookAppointment() {
+    if (!this.appointment.medecinId) {
+      this.errorMessage = 'Aucun médecin sélectionné.';
+      Swal.fire({
+        title: 'Erreur',
+        text: 'Veuillez sélectionner un médecin.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
       return;
     }
-
-    if (!this.appointmentData.date || !this.appointmentData.time) {
-      this.errorMessage = 'Veuillez remplir tous les champs.';
-      return;
-    }
-
-    this.userService.getDoctors().subscribe({
-      next: (doctors) => {
-        const doctor = doctors.find(d => d.id === this.medecinId);
-        if (doctor) {
-          this.appointmentData.doctorName = doctor.name;
-          this.appointmentService.createAppointment(this.appointmentData).subscribe({
-            next: (appointment) => {
-              console.log('RDV pris avec succès:', appointment);
-              this.errorMessage = null;
-              alert('Rendez-vous enregistré. Veuillez ajouter vos symptômes.');
-              this.router.navigate([`/patient/symptoms/new/${this.medecinId}`], {
-                queryParams: { appointmentId: appointment.id },
-              });
-            },
-            error: (error) => {
-              this.errorMessage = 'Erreur lors de la création du RDV.';
-              console.error('Erreur création RDV:', error);
-            },
-          });
-        } else {
-          this.errorMessage = 'Médecin non trouvé.';
-        }
+    this.appointmentService.createAppointment(this.appointment).subscribe({
+      next: (createdAppointment) => {
+        this.errorMessage = null;
+        Swal.fire({
+          title: 'Succès !',
+          text: 'Votre rendez-vous a été soumis pour approbation. Veuillez ajouter vos symptômes.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+        console.log('Created Appointment ID:', createdAppointment.id);
+        this.router.navigate([`/patient/symptoms/new/${this.appointment.medecinId}`], {
+          queryParams: { appointmentId: createdAppointment.id },
+        });
+        this.appointment = {
+          id: 0,
+          patientId: this.currentPatient?.id || 0,
+          medecinId: this.appointment.medecinId,
+          date: '',
+          time: '',
+          appointmentStatus: 'en_attente',
+          consultationStatus: null,
+        };
       },
       error: (error) => {
-        this.errorMessage = 'Erreur lors de la récupération du médecin.';
-        console.error('Erreur récupération médecin:', error);
+        console.error('Erreur lors de la création du rendez-vous:', error);
+        this.errorMessage = 'Erreur lors de la création du rendez-vous.';
+        Swal.fire({
+          title: 'Erreur',
+          text: 'Une erreur s\'est produite lors de la création du rendez-vous.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       },
     });
   }

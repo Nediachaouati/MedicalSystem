@@ -1,8 +1,9 @@
-import { Symptom } from 'src/symptom/entities/symptom.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Symptom } from 'src/symptom/entities/symptom.entity';
+import { Prescription } from 'src/prescription/entities/prescription.entity';
 
-@Entity('appointments')
+@Entity()
 export class Appointment {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,36 +14,47 @@ export class Appointment {
   @Column()
   medecinId: number;
 
-  @Column({ nullable: true })
-  secretaryId: number;
-
   @Column()
   date: string;
 
   @Column()
   time: string;
 
-  @Column()
-  status: 'en_attente' | 'confirmé' | 'refusé';
+  @Column({
+    type: 'enum',
+    enum: ['en_attente', 'approuvé', 'annulé'],
+    default: 'en_attente',
+  })
+  appointmentStatus: 'en_attente' | 'approuvé' | 'annulé';
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: ['en_cours', 'terminée'],
+    nullable: true,
+  })
+  consultationStatus: 'en_cours' | 'terminée' | null;
+
+  @Column({ nullable: true })
   patientName: string;
 
-  @Column()
+  @Column({ nullable: true })
   doctorName: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'patientId' })
+  @Column({ nullable: true })
+  secretaryId: number;
+
+  @ManyToOne(() => User, { nullable: true })
   patient: User;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'medecinId' })
+  @ManyToOne(() => User, { nullable: true })
   medecin: User;
 
   @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'secretaryId' })
   secretary: User;
 
   @OneToMany(() => Symptom, (symptom) => symptom.appointment)
   symptoms: Symptom[];
+
+  @OneToMany(() => Prescription, (prescription) => prescription.appointment)
+  prescriptions: Prescription[];
 }

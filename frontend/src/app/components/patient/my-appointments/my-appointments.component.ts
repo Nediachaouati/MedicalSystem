@@ -6,6 +6,7 @@ import { User } from '../../../models/user';
 import { Appointment } from '../../../models/appointment';
 import { UserService } from '../../../services/user-service';
 import { AppointmentService } from '../../../services/appointment.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-my-appointments',
@@ -49,6 +50,18 @@ export class MyAppointmentsComponent implements OnInit {
       error: (error) => {
         console.error('Erreur lors de la récupération des rendez-vous:', error);
         this.errorMessage = `Erreur lors de la récupération des rendez-vous: ${error.message}`;
+      },
+    });
+  }
+
+  downloadPrescriptionPdf(appointmentId: number) {
+    this.appointmentService.generatePrescriptionPdf(appointmentId).subscribe({
+      next: (blob) => {
+        saveAs(blob, `ordonnance_${appointmentId}.pdf`);
+      },
+      error: (error) => {
+        console.error('Erreur lors du téléchargement de l\'ordonnance:', error);
+        this.errorMessage = 'Erreur lors du téléchargement de l\'ordonnance.';
       },
     });
   }

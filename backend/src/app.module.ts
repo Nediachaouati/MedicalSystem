@@ -15,6 +15,7 @@ import { AppointmentModule } from './appointment/appointment.module';
 import { ChatModule } from './chat/chat.module';
 import { NotificationsModule } from './Notification/notifications.module';
 import { SymptomModule } from './symptom/symptom.module';
+import { PrescriptionModule } from './prescription/prescription.module';
 
 @Module({
   imports: [
@@ -56,7 +57,7 @@ import { SymptomModule } from './symptom/symptom.module';
       synchronize: true,
     }),
     
-     AuthModule, UsersModule, AppointmentModule, ChatModule ,NotificationsModule,SymptomModule,],
+     AuthModule, UsersModule, AppointmentModule, ChatModule ,NotificationsModule,SymptomModule, PrescriptionModule,],
   controllers: [AppController],
   providers: [
     AppService,{

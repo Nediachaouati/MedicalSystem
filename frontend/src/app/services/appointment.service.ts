@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Appointment } from '../models/appointment';
 import { Symptom } from '../models/symptom';
+import { Prescription } from '../models/Prescription';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { Symptom } from '../models/symptom';
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
   private symptomsApiUrl = `${environment.apiUrl}/symptoms`;
+  private prescriptionsApiUrl = `${environment.apiUrl}/prescriptions`;
 
   constructor(private http: HttpClient) {}
 
@@ -33,6 +35,7 @@ export class AppointmentService {
     });
   }
 
+
   createAppointment(appointment: Appointment): Observable<Appointment> {
     return this.http.post<Appointment>(this.apiUrl, appointment, {
       headers: this.getAuthHeaders(),
@@ -45,11 +48,11 @@ export class AppointmentService {
     });
   }
 
-  updateAppointmentStatus(appointmentId: number, status: string): Observable<Appointment> {
+  updateAppointmentStatus(appointmentId: number, appointmentStatus: string): Observable<Appointment> {
     return this.http.patch<Appointment>(
-      `${this.apiUrl}/${appointmentId}/status`,
-      { status },
-      { headers: this.getAuthHeaders() },
+      `${this.apiUrl}/${appointmentId}/appointment-status`,
+      { appointmentStatus },
+      { headers: this.getAuthHeaders() }
     );
   }
 
@@ -60,5 +63,39 @@ export class AppointmentService {
       { appointmentId },
       { headers: this.getAuthHeaders() },
     );
+  }
+
+  updateConsultationStatus(appointmentId: number, consultationStatus: string): Observable<Appointment> {
+    return this.http.patch<Appointment>(
+      `${this.apiUrl}/${appointmentId}/consultation-status`,
+      { consultationStatus },
+      { headers: this.getAuthHeaders() }
+    );
+  }
+  createPrescription(prescription: Prescription): Observable<Prescription> {
+    return this.http.post<Prescription>(this.prescriptionsApiUrl, prescription, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  updatePrescription(id: number, prescription: Prescription): Observable<Prescription> {
+    console.log('Updating prescription with ID:', id, 'to:', `${this.prescriptionsApiUrl}/${id}`);
+    return this.http.patch<Prescription>(`${this.prescriptionsApiUrl}/${id}`, prescription, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  getPrescriptionsByAppointment(appointmentId: number): Observable<Prescription[]> {
+    return this.http.get<Prescription[]>(`${this.prescriptionsApiUrl}/appointment/${appointmentId}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  generatePrescriptionPdf(appointmentId: number): Observable<Blob> {
+    console.log('Requesting PDF from:', `${this.prescriptionsApiUrl}/appointment/${appointmentId}/pdf`);
+    return this.http.get(`${this.prescriptionsApiUrl}/appointment/${appointmentId}/pdf`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob',
+    });
   }
 }

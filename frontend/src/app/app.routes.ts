@@ -44,14 +44,14 @@ export const routes: Routes = [
   { path: 'admin/users', component: ManageMedecinsComponent },
   { path: 'admin/add-medecin', component: AddMedecinComponent},
  
-  { path: 'patient/appointments/new/:doctorId', component: BookAppointmentComponent},
+  { path: 'patient/appointments/new/:medecinId', component: BookAppointmentComponent},
   { path: 'admin/secretaries', component: ManageSecretariesComponent},
   { path: 'admin/add-secretaire', component: AddSecretaireComponent },
   { path: 'list-patients', component: ListPatientsComponent },
   { path: 'our-services', component: OurServicesComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'patient/appointments', component: MyAppointmentsComponent },
-   { path: 'patient/symptoms/new/:doctorId', component: SymptomsFormComponent },
+  { path: 'patient/symptoms/new/:doctorId', component: SymptomsFormComponent },
 
 
 ];

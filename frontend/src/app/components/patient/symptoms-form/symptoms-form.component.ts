@@ -7,6 +7,7 @@ import { AppointmentService } from '../../../services/appointment.service';
 import { UserService } from '../../../services/user-service';
 import { Symptom } from '../../../models/symptom';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-symptoms-form',
@@ -16,7 +17,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./symptoms-form.component.css'],
 })
 export class SymptomsFormComponent implements OnInit {
-  symptom: Symptom = { date: '', description: '', intensity: 1, patientId: 0, appointmentId: undefined };
+  symptom: Symptom = {
+    date: '', 
+    description: '',
+    intensity: 1,
+    patientId: 0,
+    appointmentId: undefined,
+  };
   doctorId: number | undefined;
   errorMessage: string | null = null;
 
@@ -37,6 +44,7 @@ export class SymptomsFormComponent implements OnInit {
       }
       const appointmentId = this.route.snapshot.queryParamMap.get('appointmentId');
       this.symptom.appointmentId = appointmentId ? +appointmentId : undefined;
+      console.log('Doctor ID:', this.doctorId);
       console.log('Appointment ID from query params:', this.symptom.appointmentId);
     });
 
@@ -52,19 +60,38 @@ export class SymptomsFormComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('Symptom before submission:', this.symptom);
     if (!this.symptom.date || !this.symptom.description || !this.symptom.intensity || !this.symptom.appointmentId) {
       this.errorMessage = 'Veuillez remplir tous les champs et associer un rendez-vous.';
+      Swal.fire({
+        title: 'Erreur',
+        text: 'Veuillez remplir tous les champs et associer un rendez-vous.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
     this.appointmentService.createSymptom(this.symptom).subscribe({
       next: () => {
-        alert('Symptôme enregistré avec succès.');
+        this.errorMessage = null;
+        Swal.fire({
+          title: 'Succès !',
+          text: 'Symptôme enregistré avec succès.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
         this.router.navigate(['/patient/dashboard']);
       },
       error: (error) => {
         console.error('Erreur lors de l\'enregistrement du symptôme:', error);
         this.errorMessage = 'Erreur lors de l\'enregistrement du symptôme.';
+        Swal.fire({
+          title: 'Erreur',
+          text: 'Une erreur s\'est produite lors de l\'enregistrement du symptôme.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       },
     });
   }
