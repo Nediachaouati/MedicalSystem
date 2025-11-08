@@ -1,8 +1,35 @@
 <app-navbar></app-navbar>
-<div class="main-container">
+<div class="dashboard-wrapper">
   <app-sidebar></app-sidebar>
-  <div class="content">
-    <h1>Admin Dashboard</h1>
-    <p>Welcome to the admin space. Manage users, settings, and more.</p>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h1>Tableau de bord Admin: <span>Statistiques globales du système</span> </h1>
+   
+    </div>
+
+    <!-- CARTES STAT -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-user-doctor"></i></div>
+        <div class="stat-info">
+          <h3>{{ stats.doctors }}</h3>
+          <p>Médecins</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-user-nurse"></i></div>
+        <div class="stat-info">
+          <h3>{{ stats.secretaries }}</h3>
+          <p>Secrétaires</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAPHIQUE -->
+    <div class="chart-container">
+  <h2>Évolution des rendez-vous (6 derniers mois)</h2>
+  <canvas #chartCanvas></canvas>
+</div>
   </div>
 </div>

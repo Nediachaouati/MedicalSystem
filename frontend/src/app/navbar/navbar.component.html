@@ -1,28 +1,28 @@
 <nav class="navbar">
   <div class="navbar-logo">
     <img
-      src="https://cdn.vectorstock.com/i/1000v/15/16/document-page-logo-concept-vector-14051516.jpg"
+      src="https://th.bing.com/th/id/R.70dabf9988bd0e6cb982456ae9006a57?rik=6c0CEo2VXyvPTA&pid=ImgRaw&r=0"
       alt="Logo"
       class="logo"
       routerLink="/home"
     />
-    <span class="logo-text">DIGI-RH</span>
+    <span class="logo-text">CareConnect</span>
   </div>
 
   <div class="navbar-buttons">
     <ng-container *ngIf="!isLoggedIn(); else loggedIn">
-      <a routerLink="/login" class="btn btn-primary">Login</a>
-      <a routerLink="/register" class="btn btn-secondary">Register</a>
+      <a routerLink="/login" class="btn btn-primary">SignIn</a>
+      <a routerLink="/register" class="btn btn-primary">SignUp</a>
     </ng-container>
 
     <ng-template #loggedIn>
-      <a *ngIf="isPatient()" routerLink="/our-services" class="btn btn-info">Our Services</a>
+      <a *ngIf="isPatient()" routerLink="/our-services" class="btn btn-info" title="Assistant virtuel">
+  <i class="fas fa-robot"></i>
+</a>
 
       <div *ngIf="isDoctorOrSecretary()" class="notification-container">
         <a class="notification-link" (click)="toggleNotifications()" title="Notifications">
-          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828736.png"
-               alt="Notifications"
-               class="notification-icon"/>
+               <i class="fas fa-bell"> </i>
           <span *ngIf="unreadCount > 0" class="notification-count">{{ unreadCount }}</span>
         </a>
 
@@ -54,7 +54,10 @@
         <img [src]="getPhotoUrl(currentUser?.photo)" alt="Photo de profil" class="profile-icon"/>
       </a>
 
-      <button class="btn btn-danger" (click)="logout()">Logout</button>
+      <button class="btn btn-primary" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+
+      </button>
     </ng-template>
   </div>
 </nav>

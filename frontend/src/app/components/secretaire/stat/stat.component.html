@@ -4,11 +4,12 @@
   <app-sidebar></app-sidebar>
 
   <div class="main-content">
-    <div class="page-header">
-      <h1>Statistiques Globales</h1>
-      
-    </div>
+    
+      <h1>Statistiques des Rendez-Vous</h1>
+    
+    
 
+    <!-- STATS -->
     <div class="secretaire-stats-content">
       <div class="stats-grid">
         <div class="stat-card">
@@ -27,27 +28,19 @@
           </div>
         </div>
 
-        <div class="stat-card completed">
-          <div class="icon"><i class="fas fa-clipboard-check"></i></div>
+        <div class="stat-card canceled">
+          <div class="icon"><i class="fas fa-times-circle"></i></div>
           <div class="info">
-            <h3>{{ stats.completedConsultations }}</h3>
-            <p>Consultations terminées</p>
-          </div>
-        </div>
-
-        <div class="stat-card ongoing">
-          <div class="icon"><i class="fas fa-hourglass-half"></i></div>
-          <div class="info">
-            <h3>{{ stats.ongoingConsultations }}</h3>
-            <p>Consultations en cours</p>
+            <h3>{{ stats.canceledAppointments }}</h3>
+            <p>RDV annulés</p>
           </div>
         </div>
       </div>
 
       <div class="chart-container">
-        <h3>Évolution des RDV (6 mois)</h3>
-        <canvas #chartCanvas></canvas>
-      </div>
+  <h3>Évolution des RDV (6 mois)</h3>
+  <canvas #chartCanvas></canvas>
+</div>
     </div>
   </div>
 </div>

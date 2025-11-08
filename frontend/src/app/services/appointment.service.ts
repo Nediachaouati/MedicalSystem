@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Appointment } from '../models/appointment';
 import { Symptom } from '../models/symptom';
 import { Prescription } from '../models/Prescription';
+import { User } from '../models/user';
+import { UserService } from './user-service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +17,9 @@ export class AppointmentService {
   private symptomsApiUrl = `${environment.apiUrl}/symptoms`;
   private prescriptionsApiUrl = `${environment.apiUrl}/prescriptions`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private userService: UserService
+  ) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('access_token') || '';
@@ -72,11 +77,12 @@ export class AppointmentService {
       { headers: this.getAuthHeaders() }
     );
   }
+
   createPrescription(prescription: Prescription): Observable<Prescription> {
-    return this.http.post<Prescription>(this.prescriptionsApiUrl, prescription, {
-      headers: this.getAuthHeaders(),
-    });
-  }
+  return this.http.post<Prescription>(this.prescriptionsApiUrl, prescription, {
+    headers: this.getAuthHeaders(),
+  });
+}
 
   updatePrescription(id: number, prescription: Prescription): Observable<Prescription> {
     console.log('Updating prescription with ID:', id, 'to:', `${this.prescriptionsApiUrl}/${id}`);
@@ -98,4 +104,9 @@ export class AppointmentService {
       responseType: 'blob',
     });
   }
+
+
 }
+  
+
+

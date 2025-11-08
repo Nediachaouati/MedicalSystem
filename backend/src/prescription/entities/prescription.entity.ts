@@ -1,5 +1,5 @@
 import { Appointment } from 'src/appointment/entities/appointment.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 
 @Entity()
@@ -25,6 +25,12 @@ export class Prescription {
   @ManyToOne(() => Appointment, (appointment) => appointment.prescriptions)
   appointment: Appointment;
 
-  @Column()
-  createdAt: Date;
+  @CreateDateColumn()
+    created_at: Date;
+  
+  @UpdateDateColumn()
+    updated_at: Date;
+  
+  @DeleteDateColumn({ nullable: true })
+    deleted_at: Date;
 }

@@ -1,14 +1,52 @@
 .hero-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 64px); /* Ajuster pour la hauteur de la navbar */
-  padding: 2rem;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
 }
 
 .hero-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100vw;           /* 100% de la largeur de l'écran */
+  height: auto;           /* Garde le ratio */
+  max-height: 90vh;       /* Ne dépasse pas 90% de la hauteur */
+  object-fit: cover;      /* Coupe les bords si nécessaire */
+  display: block;
+  margin: 0 auto;
+  border-radius: 0;       /* Pas de bord arrondi */
+  box-shadow: none;       /* Pas d'ombre */
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 2;
+  width: 90%;
+  max-width: 800px;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.hero-text p {
+  font-size: 1.4rem;
+  font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+  .hero-text p {
+    font-size: 1.1rem;
+  }
 }

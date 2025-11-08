@@ -1,35 +1,49 @@
 <app-navbar></app-navbar>
 <div class="main-container">
   <app-sidebar></app-sidebar>
+
   <div class="content">
-    <h1>Gérer les Médecins</h1>
-    <div class="table-header">
-      <button class="add-button" (click)="navigateToAddMedecin()">Ajouter Médecin</button>
+    <div class="page-header">
+      <h1>Gérer Médecins</h1>
+       <br><br>
+      <button class="btn-add" (click)="navigateToAddMedecin()">
+        <i class="fas fa-plus"></i> Ajouter Médecin
+      </button>
     </div>
-    <table *ngIf="doctors.length; else noDoctors">
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Email</th>
-         <th>speciality</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let doctor of doctors">
-          <td>{{ doctor.name }}</td>
-          <td>{{ doctor.email }}</td>
-         <td>{{ doctor.speciality}}</td>
-          <td>
-            <button class="delete-button" (click)="deleteDoctor(doctor.id)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+    <div class="table-container" *ngIf="doctors.length; else noDoctors">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Nom Complet</th>
+            <th>Email</th>
+            <th>Spécialité</th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doctor of doctors">
+            <td>{{ doctor.name }}</td>
+            <td>{{ doctor.email }}</td>
+            <td>{{ doctor.speciality }}</td>
+            <td class="actions">
+              <button class="btn-delete" (click)="deleteDoctor(doctor.id)" title="Supprimer">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <ng-template #noDoctors>
-      <p>Aucun médecin trouvé.</p>
+      <div class="empty-state">
+        <i class="fas fa-user-md fa-3x"></i>
+        <p>Aucun médecin enregistré.</p>
+        <button class="btn-add-small" (click)="navigateToAddMedecin()">
+          Ajouter le premier
+        </button>
+      </div>
     </ng-template>
   </div>
 </div>

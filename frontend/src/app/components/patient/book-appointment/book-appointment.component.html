@@ -2,7 +2,7 @@
 <div class="dashboard-wrapper">
   <app-sidebar></app-sidebar>
   <div class="main-content">
-    <div class="container">
+    <div class="appointment-container">
       <h1>Prendre un rendez-vous</h1>
       <form (ngSubmit)="bookAppointment()">
         <div class="form-group">
@@ -17,6 +17,7 @@
           Prendre rendez-vous
         </button>
       </form>
+
       <div *ngIf="errorMessage" class="alert alert-danger">
         {{ errorMessage }}
       </div>

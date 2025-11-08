@@ -1,53 +1,163 @@
 .sidebar {
   width: 250px;
   height: 100vh;
-  background-color: #f8f9fa;
-  padding: 1rem;
+  background: linear-gradient(135deg, #1E90FF 0%, #0077CC 100%);
+  padding: 1.5rem;
   position: fixed;
   top: 0;
   left: 0;
-  border-right: 1px solid #dee2e6;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 1000;
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-  font-size: 1.5rem;
+/* CENTRAGE VERTICAL DES LIENS */
+.centered-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* ← CENTRAGE VERTICAL */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.centered-links li {
+  margin: 0.4rem 0;
+}
+
+.centered-links a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.centered-links a:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  transform: translateX(5px);
+}
+
+.centered-links a.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+}
+
+/* LOGO */
+.navbar-logo {
+  display: flex;
+  align-items: center;
   margin-bottom: 1rem;
-  color: #333;
 }
 
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  color: white; /* ← CORRIGÉ : blanc sur fond bleu */
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.5px;
+}
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  color: rgb(5, 50, 173);
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.5px;
+}
+
+/* TITRE */
+h2 {
+  font-size: 1.3rem;
+  margin: 1.5rem 0 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+/* LISTE */
 ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 a {
   text-decoration: none;
-  color: #007bff;
-  font-size: 1rem;
-  display: block;
-  padding: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 a:hover {
-  background-color: #e9ecef;
-  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  transform: translateX(6px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
+a.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  font-weight: 600;
+}
+
+/* Icônes */
+a i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+/* BOUTON DÉCONNEXION */
 button {
-  background-color: #dc3545;
+  background: #dc3545;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
   width: 100%;
-  text-align: left;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
 }
 
 button:hover {
-  background-color: #c82333;
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
 }

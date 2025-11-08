@@ -102,7 +102,7 @@ export class UsersService {
   }
 
    async createWithRole(dto: CreateUserDto, role: Role): Promise<{ user: User; plainPassword: string }> {
-    const { email, password, name, medecinId } = dto;
+    const { email, password, name, medecinId,speciality } = dto;
 
     let medecin: User | undefined;
     if (role === Role.SECRETAIRE && medecinId) {
@@ -120,6 +120,7 @@ export class UsersService {
       password: hashedPassword,
       name,
       role,
+      speciality: role === Role.MEDECIN ? speciality : undefined,
       medecinId: role === Role.SECRETAIRE ? medecinId : undefined,
       medecin: role === Role.SECRETAIRE ? medecin : undefined,
     });
@@ -167,7 +168,14 @@ export class UsersService {
   async findAllSecretaries(): Promise<User[]> {
     return this.usersRepository.find({ where: { role: Role.SECRETAIRE } });
   }
+
+ async countByRole(role: Role): Promise<number> {
+  return this.usersRepository.count({ where: { role } });
 }
+
+}
+
+
 
 
 

@@ -1,46 +1,82 @@
 <div class="sidebar">
-  <h2>Menu</h2>
-  <div class="sidebar-content">
-    <ul class="nav-links">
-      <!-- Options communes à tous les rôles -->
-      <li><a routerLink="/home">Home</a></li>
-
-      <!-- Options pour ADMIN -->
-      <ng-container *ngIf="userRole === 'ADMIN'">
-        <li><a routerLink="/admin/dashboard">Admin Dashboard</a></li>
-        <li><a routerLink="/admin/users">Manage doctors</a></li>
-        <li><a routerLink="/admin/secretaries">Manage Secretaires</a></li>
-      </ng-container>
-
-      <!-- Options pour MEDECIN -->
-      <ng-container *ngIf="userRole === 'MEDECIN'">
-        <li><a routerLink="/medecin/dashboard">Medecin Dashboard</a></li>
-        <li><a routerLink="/medecin/appointments">Appointments</a></li>
-        <li><a routerLink="/medecin/patients">Patients</a></li>
-      </ng-container>
-
-      <!-- Options pour PATIENT -->
-      <ng-container *ngIf="userRole === 'PATIENT'">
-        <li><a routerLink="/patient/dashboard">Patient Dashboard</a></li>
-        <li><a routerLink="/patient/appointments">My Appointments</a></li>
-        <li><a routerLink="/patient/symptoms/new">Enregistrer un symptôme</a></li>
-        <li><a routerLink="/patient/records">Medical Records</a></li>
-      </ng-container>
-
-      <!-- Options pour SECRETAIRE -->
-      <ng-container *ngIf="userRole === 'SECRETAIRE'">
-        <li><a routerLink="/secretaire/dashboard">Liste des medecins</a></li>
-        <li><a routerLink="/list-patients">liste des patients</a></li>
-       
-      </ng-container>
-    </ul>
-
-    <!-- Settings link for ADMIN at the bottom -->
-    <ul class="bottom-links" *ngIf="userRole === 'ADMIN'">
-      <li><a routerLink="/admin/settings">Settings</a></li>
-    </ul>
-
-   
-    
+  <!-- LOGO EN HAUT -->
+  <div class="navbar-logo">
+    <img
+      src="https://th.bing.com/th/id/R.70dabf9988bd0e6cb982456ae9006a57?rik=6c0CEo2VXyvPTA&pid=ImgRaw&r=0"
+      alt="Logo"
+      class="logo"
+      routerLink="/home"
+    />
+    <span class="logo-text">CareConnect</span>
   </div>
+
+  <!-- LIENS CENTRÉS VERTICALEMENT -->
+  <ul class="nav-links centered-links">
+    
+     <!-- ADMIN -->
+<ng-container *ngIf="userRole === 'ADMIN'">
+  <li><a routerLink="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
+  <li><a routerLink="/admin/users"><i class="fas fa-user-md"></i> Gérer Médecins</a></li>
+  <li><a routerLink="/admin/secretaries"><i class="fas fa-user-nurse"></i> Gérer Secrétaires</a></li>
+  <li><a routerLink="/admin/settings"><i class="fas fa-cog"></i> Paramètres</a></li>
+</ng-container>
+   
+
+    <!-- MEDECIN -->
+    <ng-container *ngIf="userRole === 'MEDECIN'">
+  <li>
+    <a routerLink="/medecin/dashboard" class="menu-item">
+      <i class="fas fa-tachometer-alt"></i> Tableau de bord
+    </a>
+  </li>
+  <li>
+    <a routerLink="/medecin/appointments" class="menu-item">
+      <i class="fas fa-calendar-check"></i> Rendez-vous
+    </a>
+  </li>
+ 
+</ng-container>
+
+    <!-- PATIENT -->
+    <ng-container *ngIf="userRole === 'PATIENT'">
+  <li>
+    <a routerLink="/patient/dashboard" routerLinkActive="active">
+      <i class="fas fa-tachometer-alt me-2"></i>
+      Tableau de bord
+    </a>
+  </li>
+  <li>
+    <a routerLink="/patient/appointments" routerLinkActive="active">
+      <i class="fas fa-calendar-check me-2"></i>
+      Mes rendez-vous
+    </a>
+  </li>
+  <li>
+    <a routerLink="/our-services" routerLinkActive="active">
+      <i class="fas fa-robot me-2"></i>
+      Assistant médical 
+    </a>
+  </li>
+ 
+</ng-container>
+    <!-- SECRETAIRE -->
+    <ng-container *ngIf="userRole === 'SECRETAIRE'">
+       <li>
+    <a routerLink="/secretaire/stat" class="menu-item" routerLinkActive="active">
+      <i class="fas fa-tachometer-alt"></i> Tableau de bord
+    </a>
+  </li>
+  <li>
+    <a routerLink="/secretaire/dashboard" routerLinkActive="active">
+      <i class="fas fa-calendar-check"></i> Rendez-vous
+    </a>
+  </li>
+  <li>
+    <a routerLink="/list-patients" routerLinkActive="active">
+      <i class="fas fa-users me-2"></i>
+      Liste Patients
+    </a>
+  </li>
+</ng-container>
+  </ul>
 </div>

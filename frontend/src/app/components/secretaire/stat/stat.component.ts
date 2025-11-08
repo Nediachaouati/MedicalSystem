@@ -1,38 +1,36 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Chart from 'chart.js/auto';
-import { NavbarComponent } from '../../../navbar/navbar.component';
-import { SidebarComponent } from '../../../sidebar/sidebar.component';
+import { NavbarComponent } from "../../../navbar/navbar.component";
+import { SidebarComponent } from "../../../sidebar/sidebar.component";
 import { CommonModule } from '@angular/common';
 
-interface DoctorStats {
+interface SecretaryStats {
   patientsCount: number;
   approvedAppointments: number;
-  completedConsultations: number;
-  ongoingConsultations: number;
+  canceledAppointments: number;
   monthlyAppointments: { month: string; count: number }[];
 }
 
 @Component({
-  selector: 'app-medecindashboard',
-  templateUrl: './medecindashboard.component.html',
-  styleUrls: ['./medecindashboard.component.css'],
+  selector: 'app-secretaire-stat',
+  templateUrl: './stat.component.html',
+  styleUrls: ['./stat.component.css'],
   standalone: true,
   imports: [CommonModule, NavbarComponent, SidebarComponent]
 })
-export class MedecindashboardComponent implements OnInit, AfterViewInit {
-  stats: DoctorStats = {
+export class StatComponent implements OnInit, AfterViewInit {
+  stats: SecretaryStats = {
     patientsCount: 0,
     approvedAppointments: 0,
-    completedConsultations: 0,
-    ongoingConsultations: 0,
+    canceledAppointments: 0,
     monthlyAppointments: []
   };
 
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
   private chart!: Chart;
 
-  private apiUrl = 'http://localhost:3000/appointments/doctor-stats';
+  private apiUrl = 'http://localhost:3000/appointments/stats';
 
   constructor(private http: HttpClient) {}
 
@@ -41,6 +39,7 @@ export class MedecindashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // Le canvas existe maintenant
     if (this.stats.monthlyAppointments.length > 0) {
       this.initChart();
     }
@@ -50,44 +49,63 @@ export class MedecindashboardComponent implements OnInit, AfterViewInit {
     const token = localStorage.getItem('access_token');
     const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : {};
 
-    this.http.get<DoctorStats>(this.apiUrl, { headers }).subscribe({
+    this.http.get<SecretaryStats>(this.apiUrl, { headers }).subscribe({
       next: (res) => {
         this.stats = res;
+        console.log('Données reçues:', this.stats); // VÉRIFIE ICI
+
+        // Si le canvas est déjà chargé
         if (this.chartCanvas) {
           this.initChart();
         }
       },
-      error: (err) => console.error('Erreur stats médecin:', err)
+      error: (err) => console.error('Erreur stats:', err)
     });
   }
 
   initChart() {
-    if (!this.chartCanvas?.nativeElement) return;
+    if (!this.chartCanvas?.nativeElement) {
+      console.error('Canvas non trouvé !');
+      return;
+    }
+
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    if (this.chart) this.chart.destroy();
+    // Détruit l’ancien graphique
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    const labels = this.stats.monthlyAppointments.map(d => d.month);
+    const data = this.stats.monthlyAppointments.map(d => d.count);
+
+    console.log('Labels:', labels, 'Data:', data); // VÉRIFIE
 
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.stats.monthlyAppointments.map(d => d.month),
+        labels,
         datasets: [{
           label: 'RDV par mois',
-          data: this.stats.monthlyAppointments.map(d => d.count),
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          data,
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
           fill: true,
           tension: 0.4,
-          pointBackgroundColor: '#3b82f6',
+          pointBackgroundColor: '#10b981',
           pointRadius: 5
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } },
-        scales: { y: { beginAtZero: true } }
+        plugins: {
+          legend: { position: 'bottom' }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
       }
     });
   }

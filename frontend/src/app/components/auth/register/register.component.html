@@ -1,51 +1,65 @@
 <app-navbar></app-navbar>
-<div class="d-flex align-items-center justify-content-center min-vh-100">
-  <form class="form-signin w-50" [formGroup]="registerForm" (ngSubmit)="register()">
-    <h1 class="h3 mb-3 fw-normal">Please register</h1>
+<div class="container-fluid vh-100">
+  <div class="row h-100">
+    <!-- Left side: Medical-themed blue background with image -->
+    <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center text-white" style="background-color: #007BFF;">
+     
+      <img src="https://tse2.mm.bing.net/th/id/OIP.OniEZZSStSCBRiadJQIrOwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Medical Illustration" class="img-fluid" style="max-width: 80%;">
+      
+    </div>
+    <!-- Right side: Registration form -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+      <form class="form-signin w-75" [formGroup]="registerForm" (ngSubmit)="register()">
+      
 
-    <div class="form-floating">
-      <input
-        type="text"
-        formControlName="name"
-        class="form-control w-100"
-        id="name"
-        placeholder="Full Name"
-      />
-      <label for="name">Full Name</label>
-      <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="text-danger">
-        Name is required.
-      </div>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            formControlName="name"
+            class="form-control"
+            id="name"
+            placeholder="Full Name"
+          />
+          <label for="name">Full Name</label>
+          <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="text-danger">
+            Name is required.
+          </div>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            id="email"
+            placeholder="name@example.com"
+          />
+          <label for="email">Email address</label>
+          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger">
+            Please enter a valid email.
+          </div>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input
+            type="password"
+            formControlName="password"
+            class="form-control"
+            id="password"
+            placeholder="Password"
+          />
+          <label for="password">Password</label>
+          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger">
+            Password must be at least 6 characters long.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="registerForm.invalid">Register</button>
+        <p class="mt-4 mb-3 text-muted">
+          Already have an account? 
+          <a routerLink="/login" class="fw-bold text-primary" style="cursor: pointer; text-decoration: none;">Login</a>
+        </p>
+      </form>
     </div>
-    <br />
-    <div class="form-floating">
-      <input
-        type="email"
-        formControlName="email"
-        class="form-control w-100"
-        id="email"
-        placeholder="name@example.com"
-      />
-      <label for="email">Email address</label>
-      <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger">
-        Please enter a valid email.
-      </div>
-    </div>
-    <br />
-    <div class="form-floating">
-      <input
-        type="password"
-        formControlName="password"
-        class="form-control w-100"
-        id="password"
-        placeholder="Password"
-      />
-      <label for="password">Password</label>
-      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger">
-        Password must be at least 6 characters long.
-      </div>
-    </div>
-    <br />
-    <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="registerForm.invalid">Register</button>
-    <p class="mt-5 mb-3 text-body-secondary">© 2024 - 2025</p>
-  </form>
+  </div>
 </div>

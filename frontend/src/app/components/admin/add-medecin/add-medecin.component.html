@@ -1,39 +1,64 @@
-```html
 <app-navbar></app-navbar>
 <div class="main-container">
   <app-sidebar></app-sidebar>
+
   <div class="content">
-    <h1>Ajouter un Médecin</h1>
-    <form [formGroup]="addMedecinForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" formControlName="email" type="email" placeholder="Entrez l'email" />
-        <div *ngIf="addMedecinForm.get('email')?.invalid && addMedecinForm.get('email')?.touched" class="error">
-          Email valide requis.
-        </div>
+    <div class="form-card">
+      <!-- EN-TÊTE AVEC CROIX -->
+      <div class="form-header">
+      <h1>Ajouter Médecin</h1>
+     
+        <button type="button" class="btn-close" (click)="closeForm()" title="Fermer">
+        <i class="fas fa-times"></i>
+       </button>
       </div>
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input id="password" formControlName="password" type="password" placeholder="Entrez le mot de passe" />
-        <div *ngIf="addMedecinForm.get('password')?.invalid && addMedecinForm.get('password')?.touched" class="error">
-          Mot de passe doit avoir 6 caractères minimum.
+
+      <form [formGroup]="addMedecinForm" (ngSubmit)="onSubmit()" class="modern-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" formControlName="email" type="email" placeholder="medecin@exemple.com" />
+            <div *ngIf="addMedecinForm.get('email')?.invalid && addMedecinForm.get('email')?.touched" class="error">
+              Email valide requis.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="name">Nom complet</label>
+            <input id="name" formControlName="name" type="text" placeholder="Dr. X" />
+            <div *ngIf="addMedecinForm.get('name')?.invalid && addMedecinForm.get('name')?.touched" class="error">
+              Nom requis.
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="name">Nom</label>
-        <input id="name" formControlName="name" type="text" placeholder="Entrez le nom" />
-        <div *ngIf="addMedecinForm.get('name')?.invalid && addMedecinForm.get('name')?.touched" class="error">
-          Nom requis.
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input id="password" formControlName="password" type="password" placeholder="••••••••" />
+            <div *ngIf="addMedecinForm.get('password')?.invalid && addMedecinForm.get('password')?.touched" class="error">
+              Minimum 6 caractères.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="speciality">Spécialité</label>
+            <input id="speciality" formControlName="speciality" type="text" placeholder="Cardiologie, Pédiatrie..." />
+            <div *ngIf="addMedecinForm.get('speciality')?.invalid && addMedecinForm.get('speciality')?.touched" class="error">
+              Spécialité requise.
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="specialty">Spécialité</label>
-        <input id="speciality" formControlName="speciality" type="text" placeholder="Entrez la spécialité" />
-        <div *ngIf="addMedecinForm.get('speciality')?.invalid && addMedecinForm.get('speciality')?.touched" class="error">
-          Spécialité requise.
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="addMedecinForm.invalid" class="btn-submit">
+            Ajouter le médecin
+          </button>
+          <button type="button" class="btn-cancel" routerLink="/admin/users">
+            Annuler
+          </button>
         </div>
-      </div>
-      <button type="submit" [disabled]="addMedecinForm.invalid">Ajouter Médecin</button>
-    </form>
+      </form>
+    </div>
   </div>
 </div>

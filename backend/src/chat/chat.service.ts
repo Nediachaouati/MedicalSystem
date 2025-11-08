@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Role } from '../role.enum';
 
-const GEMINI_MODEL = 'gemini-1.5-flash';
+const GEMINI_MODEL = 'models/gemini-2.0-flash';
 
 @Injectable()
 export class ChatService {

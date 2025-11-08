@@ -17,6 +17,7 @@ import { NotificationsModule } from './Notification/notifications.module';
 import { SymptomModule } from './symptom/symptom.module';
 import { PrescriptionModule } from './prescription/prescription.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -57,7 +58,7 @@ import { PrescriptionModule } from './prescription/prescription.module';
       synchronize: true,
     }),
     
-     AuthModule, UsersModule, AppointmentModule, ChatModule ,NotificationsModule,SymptomModule, PrescriptionModule,],
+     AuthModule, UsersModule, AppointmentModule, ChatModule , NotificationsModule, SymptomModule, PrescriptionModule,],
   controllers: [AppController],
   providers: [
     AppService,{

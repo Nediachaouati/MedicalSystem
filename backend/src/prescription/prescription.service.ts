@@ -44,12 +44,12 @@ export class PrescriptionService {
     return this.prescriptionRepository.save(prescription);
   }
 
-  async findByAppointment(appointmentId: number): Promise<Prescription[]> {
-    return this.prescriptionRepository.find({
-      where: { appointmentId },
-      order: { createdAt: 'ASC' },
-    });
-  }
+ async findByAppointment(appointmentId: number): Promise<Prescription[]> {
+  return this.prescriptionRepository.find({
+    where: { appointmentId },
+    order: { created_at: 'ASC' }, // CORRIGÉ
+  });
+}
 
   async generatePrescriptionPdf(appointmentId: number, userId?: number, userRole?: string): Promise<Buffer> {
     const prescriptions = await this.findByAppointment(appointmentId);

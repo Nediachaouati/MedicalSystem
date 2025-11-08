@@ -24,14 +24,13 @@ export class AppointmentsComponent implements OnInit {
   successMessage: string | null = null;
   selectedAppointment: Appointment | null = null;
   prescription: Prescription = {
-    id: 0,
-    appointmentId: 0,
-    medication: '',
-    dosage: '',
-    duration: '',
-    additionalNotes: '',
-    createdAt: new Date(),
-  };
+  appointmentId: 0,
+  medication: '',
+  dosage: '',
+  duration: '',
+  additionalNotes: '',
+  // id et createdAt PAS définis → pas envoyés
+};
   isEditingPrescription: boolean = false;
 
   constructor(
@@ -87,18 +86,20 @@ export class AppointmentsComponent implements OnInit {
   }
 
   selectAppointmentForPrescription(appointment: Appointment) {
-    this.selectedAppointment = appointment;
-    this.isEditingPrescription = false;
-    this.prescription = {
-      id: 0,
-      appointmentId: appointment.id,
-      medication: '',
-      dosage: '',
-      duration: '',
-      additionalNotes: '',
-      createdAt: new Date(),
-    };
-  }
+  this.selectedAppointment = appointment;
+  this.isEditingPrescription = false;
+  this.prescription = {
+    appointmentId: appointment.id,  // appointment.id EXISTE ?
+    medication: '',
+    dosage: '',
+    duration: '',
+    additionalNotes: '',
+  };
+
+  console.log('appointment.id:', appointment.id); // AJOUTE ÇA
+  console.log('this.prescription:', this.prescription); // AJOUTE ÇA
+}
+
 
   selectPrescriptionForEdit(appointment: Appointment, prescription: Prescription) {
     this.selectedAppointment = appointment;

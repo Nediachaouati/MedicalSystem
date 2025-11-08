@@ -21,6 +21,5 @@ export class CreatePrescriptionDto {
   @IsOptional()
   additionalNotes?: string;
 
-  @IsNotEmpty()
-  createdAt: Date;
+  
 }

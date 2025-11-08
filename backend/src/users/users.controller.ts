@@ -13,6 +13,7 @@ import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
@@ -151,6 +152,29 @@ export class UsersController {
     return { message: `Utilisateur avec l'ID ${id} supprimé avec succès` };
   }
   
+@Get('stats')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.ADMIN)
+async getAdminStats() {
+  const doctorsCount = await this.usersService.countByRole(Role.MEDECIN);
+  const secretariesCount = await this.usersService.countByRole(Role.SECRETAIRE);
 
+  console.log('DOCTEURS:', doctorsCount);     // ← AJOUTE ÇA
+  console.log('SECRETAIRES:', secretariesCount); // ← AJOUTE ÇA
 
+  const chartData = [
+    { month: 'Jun', count: 5 },
+    { month: 'Jul', count: 8 },
+    { month: 'Aug', count: 12 },
+    { month: 'Sep', count: 10 },
+    { month: 'Oct', count: 15 },
+    { month: 'Nov', count: 18 }
+  ];
+
+  return {
+    doctors: doctorsCount,
+    secretaries: secretariesCount,
+    chartData
+  };
+}
 }

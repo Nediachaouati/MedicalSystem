@@ -1,3 +1,4 @@
+/* ===== LAYOUT ===== */
 .dashboard-wrapper {
   display: flex;
   min-height: calc(100vh - 60px);
@@ -25,6 +26,7 @@ app-sidebar {
   background: #f8fafc;
 }
 
+/* ===== HEADER ===== */
 .page-header {
   margin-bottom: 2rem;
   padding-left: 2.5rem;
@@ -43,6 +45,7 @@ app-sidebar {
   margin: 0;
 }
 
+/* ===== STATS ===== */
 .secretaire-stats-content {
   background: white;
   border-radius: 16px;
@@ -86,8 +89,7 @@ app-sidebar {
 
 .stat-card:nth-child(1) .icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
 .stat-card.approved .icon { background: linear-gradient(135deg, #10b981, #059669); }
-.stat-card.completed .icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-.stat-card.ongoing .icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.stat-card.canceled .icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
 .stat-card .info h3 {
   margin: 0;
@@ -103,6 +105,7 @@ app-sidebar {
   font-weight: 500;
 }
 
+/* ===== GRAPHIQUE ===== */
 .chart-container {
   background: white;
   border-radius: 16px;
@@ -123,6 +126,7 @@ canvas {
   height: 280px !important;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 992px) {
   app-sidebar {
     position: relative;
@@ -130,13 +134,16 @@ canvas {
     height: auto;
     top: 0;
   }
+
   .main-content {
     margin-left: 0;
     padding: 1.5rem;
   }
+
   .dashboard-wrapper {
     flex-direction: column;
   }
+
   .secretaire-stats-content,
   .chart-container {
     margin: 0 1rem 1rem 1rem;

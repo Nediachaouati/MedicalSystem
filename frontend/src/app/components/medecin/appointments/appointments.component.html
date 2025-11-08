@@ -1,17 +1,25 @@
 <app-navbar></app-navbar>
 <div class="dashboard-wrapper">
   <app-sidebar></app-sidebar>
+
   <div class="main-content">
-    <div class="container">
-      <h1>Mes Rendez-vous</h1>
-      <p>Liste de vos rendez-vous approuvés par votre secrétaire.</p>
-      <div *ngIf="successMessage" class="alert alert-success">
-        {{ successMessage }}
-      </div>
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
-      </div>
-      <table class="table table-striped" *ngIf="appointments.length > 0; else noAppointments">
+    <!-- EN-TÊTE -->
+    <div class="page-header">
+      <h1>Rendez-vous</h1>
+      
+    </div>
+
+    <!-- MESSAGES -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <!-- TABLEAU -->
+    <div class="table-container" *ngIf="appointments.length; else noAppointments">
+      <table class="modern-table">
         <thead>
           <tr>
             <th>#</th>
@@ -19,133 +27,157 @@
             <th>Date</th>
             <th>Heure</th>
             <th>Symptômes</th>
-            <th>Statut Rendez-vous</th>
-            <th>Statut Consultation</th>
+            <th>Statut RDV</th>
+            <th>Consultation</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let appointment of appointments; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ appointment.patientName || 'Patient inconnu' }}</td>
+            <td><strong>{{ appointment.patientName || 'Patient inconnu' }}</strong></td>
             <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ appointment.time }}</td>
             <td>
-              <span *ngIf="appointment.symptoms && appointment.symptoms.length > 0">
-                {{ appointment.symptoms[0].description }} (Intensité: {{ appointment.symptoms[0].intensity }}/10)
-                <span *ngIf="appointment.symptoms.length > 1">...</span>
-              </span>
-              <span *ngIf="!appointment.symptoms || appointment.symptoms.length === 0">
-                Aucun symptôme
-              </span>
+              <span class="time-badge">{{ appointment.time }}</span>
             </td>
             <td>
-              <span [ngClass]="{
-                'status-en-attente': appointment.appointmentStatus === 'en_attente',
-                'status-approuve': appointment.appointmentStatus === 'approuvé',
-                'status-annule': appointment.appointmentStatus === 'annulé'
-              }">
-                {{ appointment.appointmentStatus === 'en_attente' ? 'En attente' : appointment.appointmentStatus === 'approuvé' ? 'Approuvé' : 'Annulé' }}
+              <span *ngIf="appointment.symptoms?.length" class="symptom-tag">
+                {{ appointment.symptoms[0].description }}
+                <small>({{ appointment.symptoms[0].intensity }}/10)</small>
+              </span>
+              <span *ngIf="!appointment.symptoms?.length" class="text-muted">Aucun</span>
+            </td>
+
+            <!-- STATUT RDV -->
+            <td>
+              <span class="status-badge"
+                    [ngClass]="{
+                      'status-pending': appointment.appointmentStatus === 'en_attente',
+                      'status-approved': appointment.appointmentStatus === 'approuvé',
+                      'status-canceled': appointment.appointmentStatus === 'annulé'
+                    }">
+                {{ appointment.appointmentStatus === 'en_attente' ? 'En attente' :
+                   appointment.appointmentStatus === 'approuvé' ? 'Approuvé' : 'Annulé' }}
               </span>
             </td>
+
+            <!-- STATUT CONSULTATION -->
             <td>
-              <span *ngIf="appointment.consultationStatus" [ngClass]="{
-                'status-en-cours': appointment.consultationStatus === 'en_cours',
-                'status-terminee': appointment.consultationStatus === 'terminée'
-              }">
+              <span *ngIf="appointment.consultationStatus" class="status-badge"
+                    [ngClass]="{
+                      'status-in-progress': appointment.consultationStatus === 'en_cours',
+                      'status-completed': appointment.consultationStatus === 'terminée'
+                    }">
                 {{ appointment.consultationStatus === 'en_cours' ? 'En cours' : 'Terminée' }}
               </span>
-              <span *ngIf="!appointment.consultationStatus">N/A</span>
+              <span *ngIf="!appointment.consultationStatus" class="text-muted">N/A</span>
             </td>
-            <td>
-              <button *ngIf="appointment.consultationStatus === 'en_cours'" class="btn btn-primary" (click)="markAsTerminee(appointment)">
-                Marquer comme terminée
+
+            <!-- ACTIONS -->
+            <td class="actions">
+              <!-- Terminer -->
+              <button *ngIf="appointment.consultationStatus === 'en_cours'"
+                      class="btn-action btn-finish"
+                      (click)="markAsTerminee(appointment)">
+                Terminer
               </button>
-              <button *ngIf="appointment.consultationStatus === 'terminée' && (!appointment.prescriptions || appointment.prescriptions.length === 0)" class="btn btn-success" (click)="selectAppointmentForPrescription(appointment)">
-                Créer ordonnance
+
+              <!-- Créer ordonnance -->
+              <button *ngIf="appointment.consultationStatus === 'terminée' && (!appointment.prescriptions || appointment.prescriptions.length === 0)"
+                      class="btn-action btn-prescription"
+                      (click)="selectAppointmentForPrescription(appointment)">
+                Ordonnance
               </button>
-              <div *ngIf="appointment.prescriptions && appointment.prescriptions.length > 0">
-                <button *ngFor="let prescription of appointment.prescriptions" class="btn btn-warning btn-sm mr-2" (click)="selectPrescriptionForEdit(appointment, prescription)">
-                  Modifier ordonnance
+
+              <!-- Ordonnances existantes -->
+              <ng-container *ngIf="appointment.prescriptions && appointment.prescriptions.length > 0">
+                <button *ngFor="let prescription of appointment.prescriptions"
+                        class="btn-action btn-edit"
+                        (click)="selectPrescriptionForEdit(appointment, prescription)">
+                  <i class="fas fa-edit"></i> Modifier
+
+  <i class="fas fa-file-prescription "></i> 
                 </button>
-                <button class="btn btn-info btn-sm" (click)="downloadPrescriptionPdf(appointment.id)">
-                  Télécharger ordonnance
+                <button class="btn-action btn-download"
+                        (click)="downloadPrescriptionPdf(appointment.id)">
+                 <i class="fas fa-download "></i> Télécharger
+  <i class="fas fa-file-prescription "></i> 
                 </button>
-              </div>
+              </ng-container>
             </td>
           </tr>
         </tbody>
       </table>
-      <ng-template #noAppointments>
-        <p>Aucun rendez-vous approuvé trouvé.</p>
-      </ng-template>
+    </div>
 
-      <!-- Prescription Form -->
-      <div *ngIf="selectedAppointment && selectedAppointment.consultationStatus === 'terminée'" class="prescription-form mt-4">
-        <h2>{{ isEditingPrescription ? 'Modifier l\'ordonnance' : 'Créer une ordonnance' }} pour {{ selectedAppointment.patientName }}</h2>
-        <form (ngSubmit)="submitPrescription()" #prescriptionForm="ngForm">
-          <div class="form-group">
-            <label for="medication">Médicament</label>
-            <input
-              type="text"
-              class="form-control"
-              id="medication"
-              [(ngModel)]="prescription.medication"
-              name="medication"
-              required
-              #medication="ngModel"
-              [ngClass]="{'is-invalid': medication.invalid && (medication.dirty || medication.touched)}"
-            >
-            <div *ngIf="medication.invalid && (medication.dirty || medication.touched)" class="invalid-feedback">
-              Le médicament est requis.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="dosage">Dosage</label>
-            <input
-              type="text"
-              class="form-control"
-              id="dosage"
-              [(ngModel)]="prescription.dosage"
-              name="dosage"
-              required
-              #dosage="ngModel"
-              [ngClass]="{'is-invalid': dosage.invalid && (dosage.dirty || dosage.touched)}"
-            >
-            <div *ngIf="dosage.invalid && (dosage.dirty || dosage.touched)" class="invalid-feedback">
-              Le dosage est requis.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="duration">Durée</label>
-            <input
-              type="text"
-              class="form-control"
-              id="duration"
-              [(ngModel)]="prescription.duration"
-              name="duration"
-              required
-              #duration="ngModel"
-              [ngClass]="{'is-invalid': duration.invalid && (duration.dirty || duration.touched)}"
-            >
-            <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="invalid-feedback">
-              La durée est requise.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="additionalNotes">Notes supplémentaires</label>
-            <textarea
-              class="form-control"
-              id="additionalNotes"
-              [(ngModel)]="prescription.additionalNotes"
-              name="additionalNotes"
-            ></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary" [disabled]="prescriptionForm.invalid">
-            {{ isEditingPrescription ? 'Mettre à jour l\'ordonnance' : 'Enregistrer ordonnance' }}
-          </button>
-        </form>
+    <!-- AUCUN RDV -->
+    <ng-template #noAppointments>
+      <div class="empty-state">
+        <p>Aucun rendez-vous approuvé pour le moment.</p>
       </div>
+    </ng-template>
+
+    <!-- FORMULAIRE ORDONNANCE -->
+    <div *ngIf="selectedAppointment && selectedAppointment.consultationStatus === 'terminée'" class="prescription-card">
+      <div class="card-header">
+        <h2>
+          {{ isEditingPrescription ? 'Modifier' : 'Créer' }} l’ordonnance
+          <small>pour {{ selectedAppointment.patientName }}</small>
+        </h2>
+        <button class="btn-close" (click)="selectedAppointment = null" title="Fermer">
+          x
+        </button>
+      </div>
+
+      <form (ngSubmit)="submitPrescription()" #prescriptionForm="ngForm" class="modern-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Médicament *</label>
+            <input [(ngModel)]="prescription.medication" name="medication" required #medication="ngModel"
+                   class="form-input" [class.error]="medication.invalid && medication.touched"
+                   placeholder="Paracétamol">
+            <div class="error-text" *ngIf="medication.invalid && medication.touched">
+              Champ requis
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Dosage *</label>
+            <input [(ngModel)]="prescription.dosage" name="dosage" required #dosage="ngModel"
+                   class="form-input" [class.error]="dosage.invalid && dosage.touched"
+                   placeholder="500 mg">
+            <div class="error-text" *ngIf="dosage.invalid && dosage.touched">
+              Champ requis
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Durée *</label>
+          <input [(ngModel)]="prescription.duration" name="duration" required #duration="ngModel"
+                 class="form-input" [class.error]="duration.invalid && duration.touched"
+                 placeholder="5 jours">
+          <div class="error-text" *ngIf="duration.invalid && duration.touched">
+            Champ requis
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes supplémentaires</label>
+          <textarea [(ngModel)]="prescription.additionalNotes" name="additionalNotes"
+                    class="form-textarea" rows="3"
+                    placeholder="À prendre après les repas..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="prescriptionForm.invalid" class="btn-submit">
+            {{ isEditingPrescription ? 'Mettre à jour' : 'Enregistrer' }}
+          </button>
+          <button type="button" class="btn-cancel" (click)="selectedAppointment = null">
+            Annuler
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

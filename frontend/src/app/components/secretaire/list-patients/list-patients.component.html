@@ -1,15 +1,25 @@
 <app-navbar></app-navbar>
 <div class="dashboard-wrapper">
   <app-sidebar></app-sidebar>
+
   <div class="main-content">
-    <div class="container">
-      <h2>Liste des Patients</h2>
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
-      </div>
-      <table class="table table-striped" *ngIf="patients.length > 0; else noPatients">
+    <!-- EN-TÊTE -->
+    <div class="page-header">
+      <h1>Liste Patients</h1>
+     
+    </div>
+
+    <!-- MESSAGES -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <!-- TABLEAU -->
+    <div class="table-container" *ngIf="patients.length > 0; else noPatients">
+      <table class="modern-table">
         <thead>
           <tr>
+            <th>#</th>
             <th>Nom</th>
             <th>Email</th>
             <th>Téléphone</th>
@@ -17,17 +27,40 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let patient of patients">
-            <td>{{ patient.name }}</td>
-            <td>{{ patient.email }}</td>
-            <td>{{ patient.phoneNumber || '-' }}</td>
-            <td>{{ patient.address || '-' }}</td>
+          <tr *ngFor="let patient of patients; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td><strong>{{ patient.name }}</strong></td>
+            <td>
+              <a href="mailto:{{ patient.email }}" class="email-link">
+                {{ patient.email }}
+              </a>
+            </td>
+            <td>
+              <span *ngIf="patient.phoneNumber; else noPhone">
+                {{ patient.phoneNumber }}
+              </span>
+              <ng-template #noPhone>
+                <span class="text-muted">—</span>
+              </ng-template>
+            </td>
+            <td>
+              <span *ngIf="patient.address; else noAddress">
+                {{ patient.address }}
+              </span>
+              <ng-template #noAddress>
+                <span class="text-muted">—</span>
+              </ng-template>
+            </td>
           </tr>
         </tbody>
       </table>
-      <ng-template #noPatients>
-        <p>Aucun patient n'a pris de rendez-vous avec votre médecin.</p>
-      </ng-template>
     </div>
+
+    <!-- AUCUN PATIENT -->
+    <ng-template #noPatients>
+      <div class="empty-state">
+        <p>Aucun patient n'a pris de rendez-vous avec votre médecin.</p>
+      </div>
+    </ng-template>
   </div>
 </div>

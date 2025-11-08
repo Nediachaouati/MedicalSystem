@@ -125,4 +125,132 @@ export class AppointmentService {
     }
     return savedAppointment;
   }
+
+
+  async getMonthlyCountLast6Months() {
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+
+    const result = await this.appointmentRepository
+      .createQueryBuilder('a')
+      .select("TO_CHAR(a.date, 'Mon')", 'month')
+      .addSelect('COUNT(*)', 'count')
+      .where('a.date >= :start', { start: sixMonthsAgo })
+      .groupBy("TO_CHAR(a.date, 'Mon'), TO_CHAR(a.date, 'MM')")
+      .orderBy("TO_CHAR(a.date, 'MM')")
+      .getRawMany();
+
+    return result.map(r => ({
+      month: r.month,
+      count: parseInt(r.count, 10)
+    }));
+  }
+
+
+
+  async getStatsForSecretary(secretaryId: number): Promise<{
+  patientsCount: number;
+  approvedAppointments: number;
+  canceledAppointments: number;
+  monthlyAppointments: { month: string; count: number }[];
+}> {
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+
+  // 1. Patients distincts
+  const patientsCount = await this.appointmentRepository
+    .createQueryBuilder('a')
+    .select('COUNT(DISTINCT a.patientId)', 'count')
+    .where('a.secretaryId = :secretaryId', { secretaryId })
+    .getRawOne();
+
+  // 2. Approuvés
+  const approvedAppointments = await this.appointmentRepository.count({
+    where: { secretaryId, appointmentStatus: 'approuvé' }
+  });
+
+  // 3. Annulés
+  const canceledAppointments = await this.appointmentRepository.count({
+    where: { secretaryId, appointmentStatus: 'annulé' }
+  });
+
+  // 4. Courbe mensuelle → MySQL
+  const monthlyAppointments = await this.appointmentRepository
+    .createQueryBuilder('a')
+    .select("DATE_FORMAT(a.date, '%b')", 'month')           // %b = Jun, Jul
+    .addSelect('COUNT(*)', 'count')
+    .where('a.secretaryId = :secretaryId', { secretaryId })
+    .andWhere('a.date >= :start', { start: sixMonthsAgo })
+    .groupBy("DATE_FORMAT(a.date, '%b'), MONTH(a.date)")     // %b + MONTH
+    .orderBy('MONTH(a.date)')                               // 1 à 12
+    .getRawMany();
+
+  return {
+    patientsCount: parseInt(patientsCount.count, 10),
+    approvedAppointments,
+    canceledAppointments,
+    monthlyAppointments: monthlyAppointments.map(r => ({
+      month: r.month,
+      count: parseInt(r.count, 10)
+    }))
+  };
+}
+
+
+
+async getStatsForDoctor(doctorId: number): Promise<{
+  patientsCount: number;
+  approvedAppointments: number;
+  completedConsultations: number;
+  ongoingConsultations: number;
+  monthlyAppointments: { month: string; count: number }[];
+}> {
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+
+  // 1. Patients distincts
+  const patientsCount = await this.appointmentRepository
+    .createQueryBuilder('a')
+    .select('COUNT(DISTINCT a.patientId)', 'count')
+    .where('a.medecinId = :doctorId', { doctorId })
+    .getRawOne();
+
+  // 2. RDV approuvés
+  const approvedAppointments = await this.appointmentRepository.count({
+    where: { medecinId: doctorId, appointmentStatus: 'approuvé' }
+  });
+
+  // 3. Consultations terminées
+  const completedConsultations = await this.appointmentRepository.count({
+    where: { medecinId: doctorId, consultationStatus: 'terminée' }
+  });
+
+  // 4. Consultations en cours
+  const ongoingConsultations = await this.appointmentRepository.count({
+    where: { medecinId: doctorId, consultationStatus: 'en_cours' }
+  });
+
+  // 5. Courbe mensuelle
+  const monthlyAppointments = await this.appointmentRepository
+    .createQueryBuilder('a')
+    .select("DATE_FORMAT(a.date, '%b')", 'month')
+    .addSelect('COUNT(*)', 'count')
+    .where('a.medecinId = :doctorId', { doctorId })
+    .andWhere('a.date >= :start', { start: sixMonthsAgo })
+    .groupBy("DATE_FORMAT(a.date, '%b'), MONTH(a.date)")
+    .orderBy('MONTH(a.date)')
+    .getRawMany();
+
+  return {
+    // PROTÈGE ICI
+    patientsCount: parseInt(patientsCount?.count || '0', 10),
+    approvedAppointments,
+    completedConsultations,
+    ongoingConsultations,
+    monthlyAppointments: monthlyAppointments.map(r => ({
+      month: r.month,
+      count: parseInt(r.count || '0', 10)
+    }))
+  };
+}
 }

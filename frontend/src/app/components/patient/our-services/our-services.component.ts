@@ -14,7 +14,7 @@ interface ChatMessage {
 @Component({
   selector: 'app-our-services',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent,SidebarComponent],
   templateUrl: './our-services.component.html',
   styleUrls: ['./our-services.component.css'],
 })

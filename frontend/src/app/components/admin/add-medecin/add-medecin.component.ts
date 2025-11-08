@@ -47,4 +47,8 @@ export class AddMedecinComponent {
       alert('Remplissez tous les champs correctement.');
     }
   }
+
+  closeForm() {
+  this.router.navigate(['/admin/users']);
+}
 }

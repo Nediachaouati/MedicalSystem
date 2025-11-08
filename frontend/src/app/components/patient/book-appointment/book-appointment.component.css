@@ -1,61 +1,74 @@
 .dashboard-wrapper {
   display: flex;
   min-height: 100vh;
+  background-color: #f1f5f9;
 }
 
 .main-content {
   flex: 1;
-  padding: 20px;
-  background-color: #f8f9fa;
+  padding: 40px 20px;
 }
 
-.container {
-  max-width: 600px;
+.appointment-container {
+  max-width: 500px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px 25px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.appointment-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
+  font-size: 26px;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #2c3e50;
 }
 
 .form-group {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-  font-weight: bold;
-  color: #555;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 8px;
 }
 
 .form-control {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+  padding: 12px 15px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
 .form-control:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
 }
 
 .btn-primary {
+  width: 100%;
   background-color: #007bff;
+  color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 12px;
   font-size: 16px;
-  border-radius: 4px;
+  font-weight: 600;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
@@ -63,15 +76,17 @@ h1 {
 }
 
 .btn-primary:disabled {
-  background-color: #6c757d;
+  background-color: #a0aec0;
   cursor: not-allowed;
 }
 
 .alert-danger {
   margin-top: 20px;
-  padding: 10px;
-  background-color: #f8d7da;
-  color: #721c24;
+  padding: 12px 15px;
+  background-color: #fde2e2;
+  color: #b91c1c;
   border: 1px solid #f5c6cb;
-  border-radius: 4px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
 }

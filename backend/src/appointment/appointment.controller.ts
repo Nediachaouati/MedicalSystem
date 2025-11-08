@@ -56,4 +56,18 @@ export class AppointmentController {
     }
     return this.appointmentService.updateConsultationStatus(+id, consultationStatus);
   }
+
+@Get('stats')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.SECRETAIRE)
+async getSecretaryStats(@CurrentUser() user: User) {
+  return this.appointmentService.getStatsForSecretary(user.id);
+}
+
+@Roles(Role.MEDECIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Get('doctor-stats')
+async getDoctorStats(@CurrentUser() user: User) {
+  return this.appointmentService.getStatsForDoctor(user.id);
+}
 }

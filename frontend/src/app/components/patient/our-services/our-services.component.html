@@ -1,11 +1,12 @@
 <app-navbar></app-navbar>
 <div class="dashboard-wrapper">
-  
+  <app-sidebar></app-sidebar>
   <div class="main-content">
     <div class="container">
-      <h2>Nos Services - Chatbot Médical</h2>
-      <p>Utilisez notre chatbot pour trouver un médecin adapté à vos symptômes ou poser des questions sur votre suivi médical.</p>
-
+      <div class="chatbot-intro">
+  <h2>Bienvenue sur <span>CareConnect</span></h2>
+  <p>Votre assistant médical intelligent conçu pour vous guider, vous informer et vous accompagner dans votre parcours de santé.</p>
+</div>
       <div class="chat-container">
         <div class="chat-messages" *ngIf="messages.length > 0">
           <div *ngFor="let message of messages" class="message" [ngClass]="{'user-message': message.isUser, 'bot-message': !message.isUser}">

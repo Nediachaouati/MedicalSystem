@@ -17,6 +17,8 @@ import { AppointmentsComponent } from './components/medecin/appointments/appoint
 import { ProfileComponent } from './components/profile-component/profile-component.component';
 import { MyAppointmentsComponent } from './components/patient/my-appointments/my-appointments.component';
 import { SymptomsFormComponent } from './components/patient/symptoms-form/symptoms-form.component';
+import { StatComponent } from './components/secretaire/stat/stat.component';
+
 
 export const routes: Routes = [
   {
@@ -40,7 +42,9 @@ export const routes: Routes = [
   { path: 'patient/dashboard', component: PatientdashboardComponent },
   { path: 'medecin/dashboard', component: MedecindashboardComponent },
   { path: 'medecin/appointments', component: AppointmentsComponent },
+
   { path: 'secretaire/dashboard', component: DashboardSecretariesComponent },
+  { path: 'secretaire/stat', component: StatComponent },
   { path: 'admin/users', component: ManageMedecinsComponent },
   { path: 'admin/add-medecin', component: AddMedecinComponent},
  

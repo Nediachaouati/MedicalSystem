@@ -5,6 +5,7 @@ import { SidebarComponent } from '../../../sidebar/sidebar.component';
 import { UserService } from '../../../services/user-service';
 import { User } from '../../../models/user';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-patientdashboard',
@@ -46,4 +47,10 @@ export class PatientdashboardComponent implements OnInit {
     }
     this.router.navigate([`/patient/appointments/new/${doctorId}`]);
   }
+
+ getPhotoUrl(photo: string | undefined): string {
+  if (!photo) return 'assets/default-doctor.jpg';
+  return `http://localhost:3000/${photo}`; // photo = 'Uploads/photos/...'
+}
+
 }

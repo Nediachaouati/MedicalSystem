@@ -37,7 +37,7 @@ export class MailService {
   ) {
     await this.mailerService.sendMail({
       to,
-      from: this.configService.get<string>('EMAIL_USER'),
+      from: this.configService.get<string>('MAIL_USER'),
       subject: 'Fin de votre consultation',
       template: 'appointment-completion', // Fichier dans templates/appointment-completion.hbs
       context: {

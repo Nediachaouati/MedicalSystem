@@ -1,0 +1,41 @@
+.form-signin {
+  max-width: 400px;
+  padding: 2rem;
+}
+
+.form-floating {
+  position: relative;
+}
+
+.form-control {
+  height: 50px;
+  border-radius: 0.5rem;
+}
+
+.form-control:focus {
+  border-color: #17A2B8;
+  box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+.text-danger {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.btn-primary {
+  background-color: #007BFF;
+  border-color: #007BFF;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.bg-light {
+  background-color: #E6F3FA !important; /* Light blue medical theme */
+}
+
+.text-primary {
+  color: #007BFF !important;
+}

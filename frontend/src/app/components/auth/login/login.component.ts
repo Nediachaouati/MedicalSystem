@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router , RouterModule} from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -13,7 +13,7 @@ import { NavbarComponent } from '../../../navbar/navbar.component';
 @Component({
   standalone: true,
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule, NavbarComponent],
+  imports: [ReactiveFormsModule, CommonModule, NavbarComponent, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -53,7 +53,7 @@ export class LoginComponent {
               this.router.navigate(['/patient/dashboard']);
               break;
               case 'SECRETAIRE':
-              this.router.navigate(['/secretaire/dashboard']);
+              this.router.navigate(['/secretaire/stat']);
               break;
             default:
               this.router.navigate(['/home']);

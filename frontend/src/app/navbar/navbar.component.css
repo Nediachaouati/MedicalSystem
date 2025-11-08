@@ -19,33 +19,39 @@
 }
 
 .logo-text {
-  font-size: 24px;
+   color: rgb(5, 50, 173);
   font-weight: bold;
-  color: #333;
+  font-size: 24px; /* tu peux ajuster */
+  font-family: 'Segoe UI', sans-serif;
 }
+
 
 .navbar-buttons {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 30px; 
 }
 
-.btn {
-  padding: 8px 16px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
+.notification-link i {
+  font-size: 1.5rem;
+  color: #1877f2; /* Bleu Facebook */
+  margin-right: 0; /* Pas d'espacement */
+}
+
+.notification-link:hover i {
+  color: #166fe5; /* Bleu foncé au hover */
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
 }
 
 .btn-primary {
-  background-color: #007bff;
+  
   color: white;
 }
 
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
 
 .btn-info {
   background-color: #17a2b8;
@@ -164,4 +170,15 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+}
+
+/* Logout icon */
+.logout-icon {
+  font-size: 22px;
+  color: #007BFF; /* Medical blue */
+  cursor: pointer;
+}
+
+.logout-icon:hover {
+  color: #0056b3; /* Darker blue on hover */
 }

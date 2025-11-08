@@ -1,116 +1,86 @@
 <app-navbar></app-navbar>
 <div class="profile-container">
-    <app-sidebar></app-sidebar>
-  <h1>Mon Profil</h1>
+  <app-sidebar></app-sidebar>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
-  <div *ngIf="successMessage" class="alert alert-success">
-    {{ successMessage }}
-  </div>
+  <div class="profile-card">
+    <h1>Mon Profil</h1>
 
-  <div *ngIf="user; else loading">
-    <form (ngSubmit)="updateProfile()" class="profile-form">
-      <!-- Photo de profil -->
-      <div class="form-group">
-        <label for="photo">Photo de profil</label>
-        <div class="profile-photo">
-          <img
-            [src]="getPhotoUrl(profileForm.photo)"
-            alt="Photo de profil"
-            class="profile-img"
-          />
+    <!-- ALERTES MODERNES -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      <i class="fas fa-check-circle"></i> {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+
+    <div *ngIf="user; else loading">
+      <form (ngSubmit)="updateProfile()" class="profile-form">
+        
+        <!-- PHOTO -->
+        <div class="form-group photo-group">
+          <div class="photo-wrapper">
+            <img
+              [src]="getPhotoUrl(profileForm.photo)"
+              alt="Photo de profil"
+              class="profile-img"
+            />
+            <label for="photo" class="photo-upload">
+              <i class="fas fa-camera"></i>
+            </label>
+          </div>
           <input
             type="file"
             id="photo"
             accept="image/*"
             (change)="onFileSelected($event)"
-            class="form-control"
+            hidden
           />
         </div>
-      </div>
 
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          [(ngModel)]="profileForm.email"
-          name="email"
-          class="form-control"
-          required
-        />
-      </div>
+        <!-- CHAMPS -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="profileForm.email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label>Nom complet</label>
+            <input type="text" [(ngModel)]="profileForm.name" name="name" required />
+          </div>
+        </div>
 
-      <!-- Nom -->
-      <div class="form-group">
-        <label for="name">Nom</label>
-        <input
-          type="text"
-          id="name"
-          [(ngModel)]="profileForm.name"
-          name="name"
-          class="form-control"
-          required
-        />
-      </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" [(ngModel)]="profileForm.phoneNumber" name="phoneNumber" />
+          </div>
+          <div class="form-group">
+            <label>Adresse</label>
+            <input type="text" [(ngModel)]="profileForm.address" name="address" />
+          </div>
+        </div>
 
-      <!-- Numéro de téléphone -->
-      <div class="form-group">
-        <label for="phoneNumber">Numéro de téléphone</label>
-        <input
-          type="tel"
-          id="phoneNumber"
-          [(ngModel)]="profileForm.phoneNumber"
-          name="phoneNumber"
-          class="form-control"
-        />
-      </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date de naissance</label>
+            <input type="date" [(ngModel)]="profileForm.birthDate" name="birthDate" />
+          </div>
+          <div class="form-group" *ngIf="user.role === role.MEDECIN">
+            <label>Spécialité</label>
+            <input type="text" [(ngModel)]="profileForm.speciality" name="speciality" />
+          </div>
+        </div>
 
-      <!-- Adresse -->
-      <div class="form-group">
-        <label for="address">Adresse</label>
-        <input
-          type="text"
-          id="address"
-          [(ngModel)]="profileForm.address"
-          name="address"
-          class="form-control"
-        />
-      </div>
+        <button type="submit" class="btn-submit">
+          Mettre à jour le profil
+        </button>
+      </form>
+    </div>
 
-      <!-- Date de naissance -->
-      <div class="form-group">
-        <label for="birthDate">Date de naissance</label>
-        <input
-          type="date"
-          id="birthDate"
-          [(ngModel)]="profileForm.birthDate"
-          name="birthDate"
-          class="form-control"
-        />
+    <ng-template #loading>
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Chargement...
       </div>
-
-      <!-- Spécialité (pour médecins uniquement) -->
-      <div class="form-group" *ngIf="user.role === role.MEDECIN">
-        <label for="speciality">Spécialité</label>
-        <input
-          type="text"
-          id="speciality"
-          [(ngModel)]="profileForm.speciality"
-          name="speciality"
-          class="form-control"
-        />
-      </div>
-
-      <!-- Bouton de soumission -->
-      <button type="submit" class="btn btn-primary">Mettre à jour</button>
-    </form>
+    </ng-template>
   </div>
-
-  <ng-template #loading>
-    <p>Chargement des informations du profil...</p>
-  </ng-template>
 </div>

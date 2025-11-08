@@ -1,14 +1,24 @@
 <app-navbar></app-navbar>
 <div class="dashboard-wrapper">
   <app-sidebar></app-sidebar>
+
   <div class="main-content">
-    <div class="container">
+    <!-- EN-TÊTE -->
+    <div class="page-header">
       <h1>Mes Rendez-vous</h1>
-      <p>Liste de vos rendez-vous.</p>
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
-      </div>
-      <table class="table table-striped" *ngIf="appointments.length > 0; else noAppointments">
+     
+    </div>
+
+    <!-- MESSAGES -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <br />
+
+    <!-- TABLEAU -->
+    <div class="table-container" *ngIf="appointments.length > 0; else noAppointments">
+      <table class="modern-table">
         <thead>
           <tr>
             <th>#</th>
@@ -23,40 +33,50 @@
         <tbody>
           <tr *ngFor="let appointment of appointments; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ appointment.doctorName || 'Médecin inconnu' }}</td>
+            <td><strong>{{ appointment.doctorName || 'Médecin inconnu' }}</strong></td>
             <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ appointment.time }}</td>
             <td>
-              <span *ngIf="appointment.symptoms && appointment.symptoms.length > 0">
-                {{ appointment.symptoms[0].description }} (Intensité: {{ appointment.symptoms[0].intensity }}/10)
-                <span *ngIf="appointment.symptoms.length > 1">...</span>
-              </span>
-              <span *ngIf="!appointment.symptoms || appointment.symptoms.length === 0">
-                Aucun symptôme
-              </span>
+              <span class="time-badge">{{ appointment.time }}</span>
             </td>
             <td>
-              <span [ngClass]="{
-                'status-pending': appointment.appointmentStatus === 'en_attente',
-                'status-confirmed': appointment.appointmentStatus === 'approuvé',
-                'status-rejected': appointment.appointmentStatus === 'annulé'
-              }">
-                {{ appointment.appointmentStatus === 'en_attente' ? 'En attente' : appointment.appointmentStatus === 'approuvé' ? 'Approuvé' : 'Annulé' }}
+              <span *ngIf="appointment.symptoms?.length" class="symptom-tag">
+                {{ appointment.symptoms[0].description }}
+                <small>({{ appointment.symptoms[0].intensity }}/10)</small>
+              </span>
+              <span *ngIf="!appointment.symptoms?.length" class="text-muted">Aucun</span>
+            </td>
+
+            <td>
+              <span class="status-badge"
+                    [ngClass]="{
+                      'status-pending': appointment.appointmentStatus === 'en_attente',
+                      'status-approved': appointment.appointmentStatus === 'approuvé',
+                      'status-canceled': appointment.appointmentStatus === 'annulé'
+                    }">
+                {{ appointment.appointmentStatus === 'en_attente' ? 'En attente' :
+                   appointment.appointmentStatus === 'approuvé' ? 'Approuvé' : 'Annulé' }}
               </span>
             </td>
-            <td>
-              <button *ngIf="appointment.consultationStatus === 'terminée' && appointment.prescriptions && appointment.prescriptions.length > 0" 
-                      class="btn btn-info btn-sm" 
-                      (click)="downloadPrescriptionPdf(appointment.id)">
-                Télécharger ordonnance
-              </button>
+
+            <td class="actions">
+              <button 
+  *ngIf="appointment.consultationStatus === 'terminée' && appointment.prescriptions?.length > 0"
+  class="btn-action btn-download"
+  (click)="downloadPrescriptionPdf(appointment.id)">
+  <i class="fas fa-download "></i> Télécharger
+  <i class="fas fa-file-prescription "></i> 
+</button>
             </td>
           </tr>
         </tbody>
       </table>
-      <ng-template #noAppointments>
-        <p>Aucun rendez-vous trouvé.</p>
-      </ng-template>
     </div>
+
+    <!-- AUCUN RDV -->
+    <ng-template #noAppointments>
+      <div class="empty-state">
+        <p>Aucun rendez-vous trouvé.</p>
+      </div>
+    </ng-template>
   </div>
 </div>

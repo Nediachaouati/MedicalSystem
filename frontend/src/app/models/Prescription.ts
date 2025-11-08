@@ -1,9 +1,9 @@
 export interface Prescription {
-  id: number;
+  id?: number;                    // optionnel (pas envoyé dans POST)
   appointmentId: number;
   medication: string;
   dosage: string;
   duration: string;
   additionalNotes?: string;
-  createdAt: Date;
+  createdAt?: Date;               // optionnel (généré par le backend)
 }
