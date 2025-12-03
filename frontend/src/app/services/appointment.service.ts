@@ -104,8 +104,19 @@ export class AppointmentService {
       responseType: 'blob',
     });
   }
-
-
+//rating
+addReview(appointmentId: number, rating: number, review?: string): Observable<any> {
+  return this.http.post(
+    `${this.apiUrl}/${appointmentId}/review`,
+    { rating, review },
+    { headers: this.getAuthHeaders() }
+  );
+}
+getDoctorReviews(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/reviews`, {
+    headers: this.getAuthHeaders()
+  });
+}
 }
   
 

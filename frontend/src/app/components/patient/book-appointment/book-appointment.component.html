@@ -1,26 +1,85 @@
 <app-navbar></app-navbar>
+
 <div class="dashboard-wrapper">
   <app-sidebar></app-sidebar>
+
   <div class="main-content">
     <div class="appointment-container">
-      <h1>Prendre un rendez-vous</h1>
-      <form (ngSubmit)="bookAppointment()">
-        <div class="form-group">
-          <label for="date">Date</label>
-          <input type="date" id="date" [(ngModel)]="appointment.date" name="date" class="form-control" required />
-        </div>
-        <div class="form-group">
-          <label for="time">Heure</label>
-          <input type="time" id="time" [(ngModel)]="appointment.time" name="time" class="form-control" required />
-        </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!appointment.date || !appointment.time">
-          Prendre rendez-vous
-        </button>
-      </form>
+      
+      <!-- Titre avec le nom du médecin -->
+      <h1>
+        Prendre rendez-vous
+      </h1>
 
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
+      <!-- Sélection de la date -->
+      <div class="form-group">
+        <label>Choisissez une date</label>
+        <input 
+          type="date" 
+          [(ngModel)]="selectedDate" 
+          (change)="loadAvailableSlots()"
+          [min]="today"
+          class="form-control"
+          required 
+        />
       </div>
+
+      <!-- Pas de créneaux -->
+      <div *ngIf="selectedDate && !loading && slots.length === 0" class="alert alert-info text-center">
+        <i class="fas fa-calendar-times fa-2x mb-3"></i>
+        <p><strong>Aucun créneau disponible</strong> pour cette date.</p>
+        <small>Le médecin n'a pas encore ouvert ses horaires pour ce jour.</small>
+      </div>
+
+      <!-- Chargement -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner"></div>
+        <p>Recherche des créneaux disponibles...</p>
+      </div>
+
+      <!-- Créneaux disponibles -->
+      <div *ngIf="!loading && slots.length > 0" class="slots-grid">
+        <h3 class="text-center mb-4">
+          Créneaux disponibles le 
+          <strong>{{ selectedDate | date:'fullDate':'':'fr-FR' | titlecase }}</strong>
+        </h3>
+
+        <div class="slot-card" 
+             *ngFor="let slot of slots" 
+             [class.booked]="slot.status === 'occupé'"
+             [class.available]="slot.status === 'disponible'"
+             [class.selected]="selectedSlot?.id === slot.id"
+             (click)="selectSlot(slot)"
+             [title]="slot.status === 'occupé' ? 'Déjà réservé' : 'Cliquez pour réserver'">
+          
+          <div class="time">
+            {{ slot.startTime.substring(0,5) }} - {{ slot.endTime.substring(0,5) }}
+          </div>
+
+          <div class="status">
+            <span class="badge" 
+                  [class.badge-success]="slot.status === 'disponible'" 
+                  [class.badge-danger]="slot.status === 'occupé'">
+              {{ slot.status === 'disponible' ? 'Libre' : 'Pris' }}
+            </span>
+          </div>
+
+          <!-- Icône de sélection -->
+          <div class="check-icon" *ngIf="selectedSlot?.id === slot.id && slot.status === 'disponible'">
+            <i class="fas fa-check-circle"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton de confirmation -->
+      <button 
+        *ngIf="selectedSlot && selectedSlot.status === 'disponible'" 
+        class="btn btn-success btn-lg btn-block mt-5 shadow-lg"
+        (click)="confirmAppointment()">
+        <i class="fas fa-calendar-check mr-2"></i>
+        Confirmer le rendez-vous à {{ selectedSlot.startTime.substring(0,5) }}
+      </button>
+
     </div>
   </div>
 </div>

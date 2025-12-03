@@ -1,0 +1,145 @@
+/* src/app/components/medecin/doctor-schedule/doctor-schedule.component.css */
+
+.layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px; /* largeur de ta sidebar */
+  padding: 30px 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 35px;
+  margin-bottom: 30px;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: #3498db;
+  border-radius: 2px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 16px;
+}
+
+table th {
+  background: #3498db;
+  color: white;
+  padding: 18px 15px;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+table td {
+  padding: 18px 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  color: #2c3e50;
+}
+
+table tr:hover {
+  background: #f1f8ff;
+  transition: background 0.3s;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+.badge {
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.badge-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #7f8c8d;
+}
+
+.empty-state p {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.empty-state small {
+  font-size: 16px;
+  color: #95a5a6;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .main-content {
+    margin-left: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px 15px;
+  }
+
+  .card {
+    padding: 25px 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  table th,
+  table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+}

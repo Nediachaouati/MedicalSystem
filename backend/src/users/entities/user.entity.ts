@@ -1,4 +1,5 @@
 import { Appointment } from "src/appointment/entities/appointment.entity";
+import { Availability } from "src/availability/entities/availability.entity";
 import { Role } from "src/role.enum";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -52,6 +53,10 @@ export class User {
 
   @Column({ nullable: true })
   medecinId?: number;
+
+
+  @OneToMany(() => Availability, (availability) => availability.medecin)
+availabilitiesAsDoctor: Availability[];
 
   @CreateDateColumn()
   created_at: Date;

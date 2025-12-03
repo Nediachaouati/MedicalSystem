@@ -1,0 +1,55 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard-wrapper">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="reviews-container">
+
+      <div class="page-header">
+        <h1>Avis des patients</h1>
+      </div>
+
+      <!-- CARTE NOTE MOYENNE -->
+      <div class="stats-card">
+        <h2>Note moyenne</h2>
+        <div class="big-rating">
+          <span class="stars-large">{{ getStars(getRoundedRating()) }}</span>
+          <span class="rating-number">{{ averageRating || '0' }}/5</span>
+        </div>
+        <p>{{ reviews.length }} avis reçus</p>
+      </div>
+
+      <!-- LISTE DES AVIS -->
+      <div class="reviews-list">
+        <div *ngFor="let review of reviews" class="review-card">
+          <div class="review-header">
+            <strong>{{ review.patientName }}</strong>
+            <span class="review-date">
+              {{ review.date | date:'dd MMM yyyy' }} à {{ review.time.substring(0,5) }}
+            </span>
+          </div>
+          <div class="review-rating">
+            <span class="stars">{{ getStars(review.rating) }}</span>
+            <small>{{ review.rating }}/5</small>
+          </div>
+          <p class="review-text" *ngIf="review.review">{{ review.review }}</p>
+          <p class="no-comment" *ngIf="!review.review">
+            <em>Aucun commentaire</em>
+          </p>
+        </div>
+
+        <!-- AUCUN AVIS -->
+        <div *ngIf="reviews.length === 0 && !loading" class="empty-state">
+          <p>Aucun avis pour le moment</p>
+        </div>
+
+        <!-- CHARGEMENT -->
+        <div *ngIf="loading" class="loading">
+          <p>Chargement des avis...</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

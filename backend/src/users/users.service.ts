@@ -26,8 +26,8 @@ export class UsersService {
     await this.usersRepository.softDelete(id);
   }
 
-  async findOneById(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+  async findOneById(id: number | string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id: Number(id) } });
     if (!user) {
       throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé`);
     }
@@ -39,6 +39,15 @@ export class UsersService {
       where: { id: In(ids) },
     });
   }
+
+  async findOneByIdOrEmail(identifier: string | number): Promise<User | null> {
+  return this.usersRepository.findOne({
+    where: [
+      { id: Number(identifier) },
+      { email: identifier as string }
+    ]
+  });
+}
 
   async update(id: number, updateUserDto: UpdateUserDto, photo?: Express.Multer.File): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });

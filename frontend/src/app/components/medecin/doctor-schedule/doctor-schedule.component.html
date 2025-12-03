@@ -1,0 +1,49 @@
+<!-- src/app/components/medecin/doctor-schedule/doctor-schedule.component.html -->
+
+<app-navbar></app-navbar>
+
+<div class="layout-wrapper">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="container">
+      <div class="card">
+        <h2 class="title">
+          Mes Horaires de Consultation
+        </h2>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Jour</th>
+                <th>Date</th>
+                <th>Heure début</th>
+                <th>Heure fin</th>
+                <th>Durée</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of availabilities">
+                <td>{{ formatDate(a.date) | titlecase }}</td>
+                <td>{{ a.date }}</td>
+                <td><strong>{{ formatTime(a.startTime) }}</strong></td>
+                <td><strong>{{ formatTime(a.endTime) }}</strong></td>
+                <td>
+                  <span class="badge badge-success">
+                    {{ getDuration(a.startTime, a.endTime) }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div *ngIf="availabilities.length === 0" class="empty-state">
+            <p>Aucun horaire enregistré pour le moment.</p>
+            <small>Votre secrétaire peut en ajouter depuis son espace.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,4 +16,7 @@ export interface Appointment {
   secretaryId?: number;
   symptoms?: Symptom[];
   prescriptions?: Prescription[];
+
+  rating?: number;        
+  review?: string;
 }

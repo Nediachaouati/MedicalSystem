@@ -37,12 +37,15 @@ app-sidebar {
   color: #1e293b;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
+ 
 }
 
 .page-header p {
-  color: #64748b;
-  font-size: 1rem;
-  margin: 0;
+  font-size: 2.1rem;
+  color: #1e293b;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
 }
 
 /* ===== STATS ===== */

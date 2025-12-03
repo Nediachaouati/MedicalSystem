@@ -6,7 +6,6 @@
     <!-- EN-TÊTE -->
     <div class="page-header">
       <h1>Mes Rendez-vous</h1>
-     
     </div>
 
     <!-- MESSAGES -->
@@ -17,7 +16,10 @@
     <br />
 
     <!-- TABLEAU -->
-    <div class="table-container" *ngIf="appointments.length > 0; else noAppointments">
+    <div
+      class="table-container"
+      *ngIf="appointments.length > 0; else noAppointments"
+    >
       <table class="modern-table">
         <thead>
           <tr>
@@ -33,39 +35,73 @@
         <tbody>
           <tr *ngFor="let appointment of appointments; let i = index">
             <td>{{ i + 1 }}</td>
-            <td><strong>{{ appointment.doctorName || 'Médecin inconnu' }}</strong></td>
-            <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <strong>{{ appointment.doctorName || "Médecin inconnu" }}</strong>
+            </td>
+            <td>{{ appointment.date | date : "dd/MM/yyyy" }}</td>
             <td>
               <span class="time-badge">{{ appointment.time }}</span>
             </td>
             <td>
               <span *ngIf="appointment.symptoms?.length" class="symptom-tag">
                 {{ appointment.symptoms[0].description }}
-                <small>({{ appointment.symptoms[0].intensity }}/10)</small>
               </span>
-              <span *ngIf="!appointment.symptoms?.length" class="text-muted">Aucun</span>
+              <span *ngIf="!appointment.symptoms?.length" class="text-muted"
+                >Aucun</span
+              >
             </td>
 
             <td>
-              <span class="status-badge"
-                    [ngClass]="{
-                      'status-pending': appointment.appointmentStatus === 'en_attente',
-                      'status-approved': appointment.appointmentStatus === 'approuvé',
-                      'status-canceled': appointment.appointmentStatus === 'annulé'
-                    }">
-                {{ appointment.appointmentStatus === 'en_attente' ? 'En attente' :
-                   appointment.appointmentStatus === 'approuvé' ? 'Approuvé' : 'Annulé' }}
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'status-pending':
+                    appointment.appointmentStatus === 'en_attente',
+                  'status-approved':
+                    appointment.appointmentStatus === 'approuvé',
+                  'status-canceled': appointment.appointmentStatus === 'annulé'
+                }"
+              >
+                {{
+                  appointment.appointmentStatus === "en_attente"
+                    ? "En attente"
+                    : appointment.appointmentStatus === "approuvé"
+                    ? "Approuvé"
+                    : "Annulé"
+                }}
               </span>
             </td>
 
             <td class="actions">
-              <button 
-  *ngIf="appointment.consultationStatus === 'terminée' && appointment.prescriptions?.length > 0"
-  class="btn-action btn-download"
-  (click)="downloadPrescriptionPdf(appointment.id)">
-  <i class="fas fa-download "></i> Télécharger
-  <i class="fas fa-file-prescription "></i> 
-</button>
+              <button
+                *ngIf="
+                  appointment.consultationStatus === 'terminée' &&
+                  appointment.prescriptions?.length > 0
+                "
+                class="btn-action btn-download"
+                (click)="downloadPrescriptionPdf(appointment.id)"
+              >
+                <i class="fas fa-download"></i> Télécharger
+                <i class="fas fa-file-prescription"></i>
+              </button>
+
+              <!-- Donner son avis -->
+              <button
+                *ngIf="
+                  appointment.consultationStatus === 'terminée' &&
+                  !appointment.rating
+                "
+                class="btn-action btn-review"
+                (click)="openReviewModal(appointment)"
+              >
+                <i class="fas fa-star"></i> Donner mon avis
+              </button>
+
+              <!-- Avis déjà donné -->
+              <div *ngIf="appointment.rating" class="review-given">
+                <span class="stars">★★★★★</span>
+                <small>Déjà noté ({{ appointment.rating }}/5)</small>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -78,5 +114,44 @@
         <p>Aucun rendez-vous trouvé.</p>
       </div>
     </ng-template>
+
+    <!-- MODAL AVIS -->
+<div class="modal-overlay" *ngIf="showReviewModal" (click)="closeReviewModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Votre avis nous intéresse</h3>
+    <p>Comment s'est passée votre consultation avec <strong>{{ selectedAppointment?.doctorName }}</strong> ?</p>
+
+    <div class="rating-stars">
+      <div class="stars-large">
+        <i class="fas fa-star" 
+           [class.active]="reviewForm.rating >= 1" 
+           (click)="reviewForm.rating = 1"></i>
+        <i class="fas fa-star" 
+           [class.active]="reviewForm.rating >= 2" 
+           (click)="reviewForm.rating = 2"></i>
+        <i class="fas fa-star" 
+           [class.active]="reviewForm.rating >= 3" 
+           (click)="reviewForm.rating = 3"></i>
+        <i class="fas fa-star" 
+           [class.active]="reviewForm.rating >= 4" 
+           (click)="reviewForm.rating = 4"></i>
+        <i class="fas fa-star" 
+           [class.active]="reviewForm.rating >= 5" 
+           (click)="reviewForm.rating = 5"></i>
+      </div>
+      <p class="rating-text">{{ reviewForm.rating }}/5</p>
+    </div>
+
+    <textarea 
+      [(ngModel)]="reviewForm.comment" 
+      placeholder="Votre commentaire (facultatif)" 
+      rows="4"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeReviewModal()">Annuler</button>
+      <button class="btn-success" (click)="submitReview()">Envoyer mon avis</button>
+    </div>
+  </div>
+</div>
   </div>
 </div>

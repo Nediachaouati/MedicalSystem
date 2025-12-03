@@ -16,6 +16,7 @@ import { ChatModule } from './chat/chat.module';
 import { NotificationsModule } from './Notification/notifications.module';
 import { SymptomModule } from './symptom/symptom.module';
 import { PrescriptionModule } from './prescription/prescription.module';
+import { AvailabilityModule } from './availability/availability.module';
 
 
 @Module({
@@ -53,12 +54,12 @@ import { PrescriptionModule } from './prescription/prescription.module';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'db-medical',
+      database: 'medical',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     
-     AuthModule, UsersModule, AppointmentModule, ChatModule , NotificationsModule, SymptomModule, PrescriptionModule,],
+     AuthModule, UsersModule, AppointmentModule, ChatModule , NotificationsModule, SymptomModule, PrescriptionModule, AvailabilityModule,],
   controllers: [AppController],
   providers: [
     AppService,{

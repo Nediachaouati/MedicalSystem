@@ -1,0 +1,80 @@
+<app-navbar></app-navbar>
+<div class="layout-wrapper">
+  
+  <app-sidebar></app-sidebar> 
+  <div class="main-content">
+    <div class="container">
+      <div class="card">
+        <h2 class="title">Gérer les Disponibilités du Médecin</h2>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Date</label>
+            <input type="date" [(ngModel)]="form.value.date" [ngModelOptions]="{standalone: true}" required />
+          </div>
+
+          <div class="field">
+            <label>Heure début</label>
+            <input type="time" [(ngModel)]="form.value.startTime" [ngModelOptions]="{standalone: true}" required />
+          </div>
+
+          <div class="field">
+            <label>Heure fin</label>
+            <input type="time" [(ngModel)]="form.value.endTime" [ngModelOptions]="{standalone: true}" required />
+          </div>
+
+          <div class="field full">
+            <button class="btn-primary" (click)="addAvailability()">Ajouter la journée</button>
+          </div>
+        </div>
+
+        <h3 class="subtitle">Liste des disponibilités</h3>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Créneaux générés</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let avail of availabilities">
+                <td *ngIf="editingId !== avail.id">{{ avail.date }}</td>
+                <td *ngIf="editingId === avail.id">
+                  <input type="date" [(ngModel)]="editForm.value.date" [ngModelOptions]="{standalone: true}" />
+                </td>
+
+                <td *ngIf="editingId !== avail.id">{{ avail.startTime | slice:0:5 }}</td>
+                <td *ngIf="editingId === avail.id">
+                  <input type="time" [(ngModel)]="editForm.value.startTime" [ngModelOptions]="{standalone: true}" />
+                </td>
+
+                <td *ngIf="editingId !== avail.id">{{ avail.endTime | slice:0:5 }}</td>
+                <td *ngIf="editingId === avail.id">
+                  <input type="time" [(ngModel)]="editForm.value.endTime" [ngModelOptions]="{standalone: true}" />
+                </td>
+
+                <td>
+                  <span class="slot-count">
+                    {{ getSlotCount(avail.startTime, avail.endTime) }} créneaux 
+                  </span>
+                </td>
+
+                <td class="actions">
+                  <button *ngIf="editingId !== avail.id" class="btn-edit" (click)="startEdit(avail)">Modifier</button>
+                  <button *ngIf="editingId === avail.id" class="btn-save" (click)="saveEdit()">Sauvegarder</button>
+                  <button *ngIf="editingId === avail.id" class="btn-cancel" (click)="cancelEdit()">Annuler</button>
+                  <button class="btn-delete" (click)="deleteAvailability(avail.id)">Supprimer</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

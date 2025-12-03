@@ -6,9 +6,10 @@ import { Appointment } from './entities/appointment.entity';
 import { User } from 'src/users/entities/user.entity';
 import { UsersModule } from 'src/users/users.module';
 import { MailModule } from 'src/mail/mail.module';
+import { TimeSlot } from 'src/availability/entities/time-slot.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Appointment]),UsersModule,MailModule], 
+  imports: [TypeOrmModule.forFeature([Appointment,TimeSlot]),UsersModule,MailModule], 
   providers: [AppointmentService],
   controllers: [AppointmentController],
   exports: [AppointmentService],

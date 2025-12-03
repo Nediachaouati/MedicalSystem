@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, ForbiddenException, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, ForbiddenException, ParseIntPipe, BadRequestException } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
@@ -9,16 +9,32 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/role.enum';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { TimeSlot } from '../availability/entities/time-slot.entity'; 
+import type { Request } from 'express';
+import { UsersService } from 'src/users/users.service';
 
+
+interface RequestWithUser extends Request {
+  user: {
+    id: number;
+    role: string;
+  };
+}
 
 @Controller('appointments')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AppointmentController {
-  constructor(private readonly appointmentService: AppointmentService) {}
+  constructor(private readonly appointmentService: AppointmentService,
+    private readonly usersService: UsersService
+  ) {}
 
-  @Post()
-  create(@Body() createAppointmentDto: CreateAppointmentDto, @CurrentUser() user: User): Promise<Appointment> {
-    return this.appointmentService.create({ ...createAppointmentDto, patientId: user.id });
+  @Post('book-slot')
+  @Roles(Role.PATIENT) // seulement le patient peut réserver
+  async bookSlot(
+    @Body() body: { timeSlotId: number },
+    @CurrentUser() user: User,
+  ) {
+    return this.appointmentService.bookBySlot(body.timeSlotId, user.id);
   }
 
   @Get('patient/:patientId')
@@ -69,5 +85,39 @@ async getSecretaryStats(@CurrentUser() user: User) {
 @Get('doctor-stats')
 async getDoctorStats(@CurrentUser() user: User) {
   return this.appointmentService.getStatsForDoctor(user.id);
+}
+
+@Post(':id/review')
+@Roles(Role.PATIENT)
+async addReview(
+  @Param('id') appointmentId: number,
+  @Body() body: { rating: number; review?: string },
+  @CurrentUser() user: User,
+) {
+  return this.appointmentService.addReview(appointmentId, user.id, body.rating, body.review);
+}
+
+@Get('reviews')
+@Roles(Role.MEDECIN, Role.SECRETAIRE)
+async getReviewsForDoctor(@CurrentUser() user: User) {
+  let doctorId: number;
+
+  if (user.role === 'MEDECIN') {
+    doctorId = user.id;
+  } 
+  else if (user.role === 'SECRETAIRE') {
+    // ON UTILISE LA BONNE MÉTHODE
+    const secretary = await this.usersService.findOneByIdOrEmail(user.id);
+
+    if (!secretary?.medecinId) {
+      throw new BadRequestException('Cette secrétaire n\'est pas assignée à un médecin');
+    }
+    doctorId = secretary.medecinId;
+  } 
+  else {
+    throw new ForbiddenException('Accès refusé');
+  }
+
+  return this.appointmentService.getReviewsByDoctor(doctorId);
 }
 }

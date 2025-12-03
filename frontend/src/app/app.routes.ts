@@ -18,6 +18,9 @@ import { ProfileComponent } from './components/profile-component/profile-compone
 import { MyAppointmentsComponent } from './components/patient/my-appointments/my-appointments.component';
 import { SymptomsFormComponent } from './components/patient/symptoms-form/symptoms-form.component';
 import { StatComponent } from './components/secretaire/stat/stat.component';
+import { DoctorAvailabilityComponent } from './components/secretaire/doctor-availability/doctor-availability.component';
+import { DoctorScheduleComponent } from './components/medecin/doctor-schedule/doctor-schedule.component';
+import { ReviewsDashboardComponent } from './components/shared/reviews-dashboard/reviews-dashboard.component';
 
 
 export const routes: Routes = [
@@ -42,9 +45,12 @@ export const routes: Routes = [
   { path: 'patient/dashboard', component: PatientdashboardComponent },
   { path: 'medecin/dashboard', component: MedecindashboardComponent },
   { path: 'medecin/appointments', component: AppointmentsComponent },
-
+  { path: 'doctor/schedule', component: DoctorScheduleComponent },
+  { path: 'shared/review', component: ReviewsDashboardComponent },
   { path: 'secretaire/dashboard', component: DashboardSecretariesComponent },
   { path: 'secretaire/stat', component: StatComponent },
+  { path: 'secretaire/disponibilites', component: DoctorAvailabilityComponent },
+  
   { path: 'admin/users', component: ManageMedecinsComponent },
   { path: 'admin/add-medecin', component: AddMedecinComponent},
  

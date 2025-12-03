@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Symptom } from 'src/symptom/entities/symptom.entity';
 import { Prescription } from 'src/prescription/entities/prescription.entity';
+import { TimeSlot } from 'src/availability/entities/time-slot.entity';
 
 @Entity()
 export class Appointment {
@@ -40,8 +41,11 @@ export class Appointment {
   @Column({ nullable: true })
   doctorName: string;
 
-  @Column({ nullable: true })
+  @Column()
   secretaryId: number;
+
+  @Column()
+  timeSlotId: number;  
 
   @ManyToOne(() => User, { nullable: true })
   patient: User;
@@ -57,4 +61,14 @@ export class Appointment {
 
   @OneToMany(() => Prescription, (prescription) => prescription.appointment)
   prescriptions: Prescription[];
+
+  @ManyToOne(() => TimeSlot, { eager: true })
+  @JoinColumn({ name: 'timeSlotId' })
+  timeSlot: TimeSlot;
+
+  @Column({ type: 'int', nullable: true })
+  rating?: number; 
+
+  @Column({ type: 'text', nullable: true })
+  review?: string;
 }

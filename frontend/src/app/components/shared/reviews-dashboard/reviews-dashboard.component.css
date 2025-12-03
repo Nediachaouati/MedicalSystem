@@ -1,0 +1,271 @@
+
+.dashboard-wrapper {
+  display: flex;
+  min-height: calc(100vh - 60px);
+  background: #f8fafc;
+}
+
+/* Sidebar reste à gauche */
+app-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+/* Contenu principal centré horizontalement ET verticalement */
+.main-content {
+  flex: 1;
+
+  flex-direction: column;
+  align-items: center;        /* Centre horizontalement */
+  justify-content: flex-start; /* Commence en haut */
+  overflow-y: auto;
+}
+
+/* Conteneur principal des avis – largeur max et centré */
+.reviews-container {
+  width: 100%;
+  max-width: 900px;           /* Largeur idéale */
+  margin: 0 auto;
+}
+
+/* Titre centré */
+.page-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.page-header h1 {
+  font-size: 2.3rem;
+  color: #1e293b;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Carte note moyenne – centrée et élégante */
+.stats-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+}
+
+/* Liste des avis – centrée */
+.reviews-list {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.8rem;
+}
+
+/* États vides centrés */
+.empty-state,
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+/* ===== CONTENEUR PRINCIPAL ===== */
+.reviews-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== TITRE ===== */
+.reviews-container h1 {
+  font-size: 2.2rem;
+  color: #1e293b;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+}
+
+/* ===== CARTE STATISTIQUES – VERSION DISCRÈTE & ÉLÉGANTE ===== */
+.stats-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);                           
+  color: #1e293b;
+  padding: 1.5rem 2rem;                            
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);     
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2.5rem;                           
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+  border-color: #667eea;
+}
+
+.stats-card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.big-rating {
+  margin: 1rem 0;
+}
+
+.stars-large {
+  font-size: 3rem;                                 /* Plus petit qu’avant (4rem → 3rem) */
+  letter-spacing: 6px;
+  color: #fbbf24;                                  /* Étoiles dorées */
+}
+
+.rating-number {
+  display: block;
+  font-size: 2.4rem;                               /* Réduit de 2.8rem → 2.4rem */
+  font-weight: 800;
+  margin-top: 0.4rem;
+  color: #1e293b;
+}
+
+.stats-card p {
+  font-size: 1rem;
+  color: #64748b;
+  margin-top: 0.8rem;
+}
+
+/* Option bonus : petite touche de couleur en haut de la carte */
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 16px 16px 0 0;
+}
+
+/* Si tu veux garder la carte centrée mais encore plus sobre, tu peux aussi faire : */
+.stats-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== LISTE DES AVIS ===== */
+.reviews-list {
+  display: grid;
+  gap: 1.8rem;
+}
+
+.review-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.8rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  border-left-color: #764ba2;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.review-header strong {
+  font-size: 1.2rem;
+  color: #1e293b;
+}
+
+.review-date {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.review-rating {
+  margin: 1rem 0;
+}
+
+.review-rating .stars {
+  font-size: 1.8rem;
+  color: #fbbf24;
+  letter-spacing: 4px;
+}
+
+.review-rating small {
+  color: #64748b;
+  margin-left: 0.8rem;
+  font-weight: 600;
+}
+
+.review-text {
+  margin-top: 1.2rem;
+  line-height: 1.6;
+  color: #334155;
+  font-style: italic;
+}
+
+.no-comment {
+  color: #94a3b8;
+  font-style: italic;
+  margin-top: 1rem;
+}
+
+/* ===== ÉTAT VIDE ===== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #94a3b8;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.empty-state p {
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+/* ===== CHARGEMENT ===== */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+  font-size: 1.2rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .reviews-container {
+    padding: 1rem;
+  }
+  
+  .stats-card {
+    padding: 1.5rem;
+  }
+  
+  .stars-large {
+    font-size: 3rem;
+    letter-spacing: 5px;
+  }
+  
+  .rating-number {
+    font-size: 2.2rem;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .review-header strong {
+    font-size: 1.1rem;
+  }
+}

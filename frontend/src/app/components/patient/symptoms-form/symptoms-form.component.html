@@ -35,19 +35,7 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="intensity">Intensité (1-10)</label>
-          <input
-            type="number"
-            id="intensity"
-            name="intensity"
-            [(ngModel)]="symptom.intensity"
-            required
-            min="1"
-            max="10"
-            class="form-control"
-          />
-        </div>
+       
 
         <button type="submit" class="btn btn-primary" [disabled]="!symptomForm.valid">
           Enregistrer
